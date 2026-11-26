@@ -3,13 +3,13 @@
   const frame=document.querySelector('.city-frame'), input=$('css-input'), status=$('status');
   const topics={
     selectors:{title:'Селекторы',tasks:[
-      {title:'Выбери здание',prompt:'Измени внешний вид левого жилого здания. Используй его класс .building-left.',hint:'Класс уже есть в списке «Элементы города». Нажми на него, чтобы вставить селектор.',solution:'.building-left {\n  border-color: #60a4a1;\n}',check:{selector:'.building-left',property:'border-top-color',expected:'rgb(96, 164, 161)'}}]},
+      {title:'Подсвети левое здание',prompt:'Сделай рамку левого жилого здания бирюзовой (#60a4a1). Измени только это здание.',hint:'Выбери класс .building-left. Свойство border-color задаёт цвет рамки.',solution:'.building-left {\n  border-color: #60a4a1;\n}',check:{selector:'.building-left',property:'border-top-color',expected:'rgb(96, 164, 161)'}}]},
     colors:{title:'Цвет и фон',tasks:[
-      {title:'Подсвети центральную башню',prompt:'Измени фон окон центральной башни на #60a4a1. Выбери окна только внутри центрального здания.',hint:'Составной селектор: сначала класс здания, затем через пробел класс окон.',solution:'.building-center .window {\n  background: #60a4a1;\n}',check:{selector:'.building-center .window',property:'background-color',expected:'rgb(96, 164, 161)'}}]},
+      {title:'Подсвети центральную башню',prompt:'Сделай окна центральной башни бирюзовыми (#60a4a1). Окна других зданий не меняй.',hint:'Составной селектор: сначала класс здания, затем через пробел класс окон.',solution:'.building-center .window {\n  background: #60a4a1;\n}',check:{selector:'.building-center .window',property:'background-color',expected:'rgb(96, 164, 161)'}}]},
     spacing:{title:'Размеры и расстояния',tasks:[
-      {title:'Раздвинь этажи',prompt:'Установи расстояние между этажами правого здания — 12px. Менять нужно контейнер этажей.',hint:'Контейнер называется .building-floors. Свойство gap задаёт промежуток между его дочерними элементами.',solution:'.building-right .building-floors {\n  gap: 12px;\n}',check:{selector:'.building-right .building-floors',property:'row-gap',expected:'12px'}}]},
+      {title:'Раздвинь этажи',prompt:'Установи промежуток между этажами правого здания — ровно 12px.',hint:'Контейнер называется .building-floors. Свойство gap задаёт промежуток между его дочерними элементами.',solution:'.building-right .building-floors {\n  gap: 12px;\n}',check:{selector:'.building-right .building-floors',property:'row-gap',expected:'12px'}}]},
     effects:{title:'Эффекты',tasks:[
-      {title:'Сделай окна прозрачнее',prompt:'Установи прозрачность окон центральной башни на 0.55.',hint:'Выбери окна центрального здания и задай opacity.',solution:'.building-center .window {\n  opacity: 0.55;\n}',check:{selector:'.building-center .window',property:'opacity',expected:'0.55'}}]}
+      {title:'Сделай окна прозрачнее',prompt:'Установи прозрачность окон центральной башни на 0.55 (55%).',hint:'Выбери окна центрального здания и задай opacity.',solution:'.building-center .window {\n  opacity: 0.55;\n}',check:{selector:'.building-center .window',property:'opacity',expected:'0.55'}}]}
   };
   let topic='selectors',index=0,pending=null,request=0,done=false;
   const apply=()=>frame.contentWindow?.postMessage({type:'NOCTURNE_APPLY_CSS',css:input.value},'*');
