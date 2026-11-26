@@ -3,7 +3,7 @@
   const frame=document.querySelector('.city-frame'), input=$('css-input'), status=$('status');
   const topics={
     selectors:{title:'Селекторы',tasks:[
-      {title:'Подсвети левое здание',prompt:'Сделай рамку левого жилого здания бирюзовой (#60a4a1). Измени только это здание.',hint:'Выбери класс .building-left. Свойство border-color задаёт цвет рамки.',solution:'.building-left {\n  border-color: #60a4a1;\n}',check:{selector:'.building-left',property:'border-top-color',expected:'rgb(96, 164, 161)'}}]},
+      {title:'Подсвети левое здание',prompt:'Сделай рамку левого жилого здания бирюзовой (#60a4a1). Измени только это здание.',hint:'Выбери класс .building-left. Свойство border-color задаёт цвет рамки.',reference:[{title:'Рамка',items:[['border','Задаёт рамку целиком: толщину, стиль и цвет. Например: border: 2px solid teal;'],['border-color','Меняет только цвет уже существующей рамки. Можно задать один цвет или разные стороны.'],['border-width','Толщина рамки. Например: 2px.'],['border-style','Вид линии: solid, dashed, dotted, double, none. Без стиля рамка обычно не видна.'],['border-radius','Скругляет углы рамки.'] ]},{title:'Контур рядом с рамкой',items:[['outline','Рисует внешний контур вокруг элемента; не занимает место в раскладке.'],['outline-color','Цвет внешнего контура.'],['outline-width / style','Толщина и вид внешнего контура.'] ]},{title:'Подсветка и свечение',items:[['box-shadow','Тень или свечение вокруг элемента. Для свечения используют цветной shadow без большого смещения, например 0 0 12px #60a4a1.'],['opacity','Прозрачность всего элемента вместе с содержимым: от 0 до 1.'] ]},{title:'Цвет и прозрачность',items:[['color','Цвет текста и некоторых других передних элементов, но не рамки.'],['background / background-color','Цвет или фон внутри элемента. Не меняет цвет рамки.'],['rgba() / #RRGGBBAA','Цвет с альфа-каналом: позволяет сделать сам цвет полупрозрачным.'] ]}],solution:'.building-left {\n  border-color: #60a4a1;\n}',check:{selector:'.building-left',property:'border-top-color',expected:'rgb(96, 164, 161)'}}]},
     colors:{title:'Цвет и фон',tasks:[
       {title:'Подсвети центральную башню',prompt:'Сделай окна центральной башни бирюзовыми (#60a4a1). Окна других зданий не меняй.',hint:'Составной селектор: сначала класс здания, затем через пробел класс окон.',solution:'.building-center .window {\n  background: #60a4a1;\n}',check:{selector:'.building-center .window',property:'background-color',expected:'rgb(96, 164, 161)'}}]},
     spacing:{title:'Размеры и расстояния',tasks:[
@@ -22,6 +22,8 @@
     $('task-title').textContent=task.title;
     $('task-prompt').textContent=task.prompt;
     $('hint').textContent=task.hint;
+    const reference=$('reference-content');reference.innerHTML=(task.reference||[]).map(group=>'<section class="reference-group"><h3>'+group.title+'</h3>'+group.items.map(item=>'<div class="reference-item"><code>'+item[0]+'</code><p>'+item[1]+'</p></div>').join('')+'</section>').join('')+'<p class="reference-note">Справочник не ограничивает выбор одним способом. Смотри, пробуй свойства и сравнивай результат в городе.</p>';
+    $('reference-content').closest('details').open=false;
     $('solution').textContent=task.solution;
     $('task-count').textContent=String(index+1).padStart(2,'0')+' / '+String(data.tasks.length).padStart(2,'0');
     $('progress').style.width=((index+1)/data.tasks.length*100)+'%';
