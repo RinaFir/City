@@ -262,7 +262,7 @@
   frame.addEventListener('load',apply);
   $('reset').addEventListener('click',()=>{pending=null;done=false;input.value='';$('check').disabled=false;apply();setStatus('Код очищен.');});
   $('insert').addEventListener('click',()=>{input.value=current().solution;apply();setStatus('Решение вставлено в редактор.');});
-  $('skip').addEventListener('click',()=>{const order=Object.keys(topics);topic=order[(order.indexOf(topic)+1)%order.length];index=0;render();});
+  $('skip').addEventListener('click',()=>{if(index<topics[topic].tasks.length-1){index++;render();return;}setStatus('В этом разделе больше нет заданий. Выбери другой раздел сверху.');});
   $('check').addEventListener('click',()=>{
     if(pending||done)return;
     if(!input.value.trim()){setStatus('Сначала напиши CSS.','bad');return;}
