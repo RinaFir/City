@@ -192,6 +192,57 @@
       ['Отличие от :nth-child()','Если перед окнами есть другой тег, :nth-child() учитывает его позицию, а :nth-of-type() — нет.']
     ]]
   ]};
+  const pseudoClassReference={title:'Псевдоклассы и их сочетания',items:[
+    [':not() — исключение','Исключает элементы, подходящие под селектор внутри скобок.',[
+      ['Несколько исключений','Можно написать .window:not(.lit):not(.pink) — окна без обоих классов.'],
+      ['Список внутри :not()','.window:not(.lit, .pink) — то же исключение несколькими вариантами внутри одной функции.'],
+      ['Сочетание с позицией','.floor:nth-child(odd) .window:not(.lit) — окна без lit на нечётных этажах.']
+    ]],
+    [':is() — один из вариантов','Выбирает элемент, если подходит хотя бы один селектор из списка.',[
+      ['Вложенное сочетание','.building :is(.roof, .building-base) выбирает крышу или основание внутри здания.'],
+      ['Сочетание с :not()','.window:is(.pink, .teal):not(.lit) — розовые или бирюзовые окна, кроме светящихся.']
+    ]],
+    [':where() — варианты без специфичности','Работает как :is(), но не добавляет специфичность.',[
+      ['В составе сложного селектора',':where(.building-left, .building-right) .floor:nth-child(even) выбирает чётные этажи двух зданий.']
+    ]],
+    [':has() — условие для родителя','Выбирает сам элемент, если внутри него есть совпадение.',[
+      ['Сочетание с :not()','.building:has(.window.pink):not(:has(.window.teal)) — здание с розовым окном, но без бирюзовых.'],
+      ['Вложенная связь','.building:has(> .building-floors .floor:nth-child(odd) .window.lit) — здание, где на нечётном этаже есть светящееся окно.']
+    ]],
+    ['Позиционные псевдоклассы','Проверяют место элемента среди детей родителя или среди элементов того же типа.',[
+      [':first-child / :last-child','Первый или последний ребёнок родителя.'],
+      [':nth-child(An+B)','Позиции по формуле: odd, even, 2n, 3n+1, -n+3. Считает всех детей.'],
+      [':nth-of-type(An+B)','Та же формула, но считает только соседние элементы того же HTML-тега.'],
+      ['Комбинации','.floor:nth-child(odd) > .window:nth-of-type(2n):not(.lit) объединяет этаж, прямого ребёнка, позицию окна и исключение класса.']
+    ]],
+    ['Псевдоклассы состояния','Выбирают элемент по текущему взаимодействию или состоянию формы.',[
+      [':hover / :active','Наведение указателя и активное нажатие.'],
+      [':focus / :focus-visible / :focus-within','Фокус самого элемента, видимый клавиатурный фокус и наличие фокуса внутри контейнера.'],
+      [':checked / :disabled / :enabled','Состояния переключателей и доступности элементов формы.'],
+      [':required / :optional / :valid / :invalid','Состояния проверки полей формы. Для них нужны настоящие элементы формы.']
+    ]]
+  ]};
+  const pseudoElementReference={title:'Псевдоэлементы и их сочетания',items:[
+    ['::before и ::after','Создают виртуальные элементы перед содержимым или после него.',[
+      ['Синтаксис','Пишутся с двумя двоеточиями: .building-sign b::before.'],
+      ['Обязательное условие','Для отображения обычно задают content, например content: "CORE"; без content псевдоэлемент не появится.'],
+      ['Сочетание','.building-center .building-sign b:first-of-type::after — псевдоэлемент после содержимого выбранного элемента.']
+    ]],
+    ['::first-letter и ::first-line','Выбирают первую букву и первую отображаемую строку текста.',[
+      ['Первая буква','.building-sign b::first-letter — первая буква названия здания.'],
+      ['Первая строка','.building-sign b::first-line — первая отображаемая строка текста.']
+    ]],
+    ['::selection','Выбирает фрагмент текста, выделенный пользователем.',[
+      ['Пример','.building-sign b::selection — выделенная часть названия здания.']
+    ]],
+    ['::placeholder','Выбирает текст-подсказку поля ввода.',[
+      ['Пример','input::placeholder. Работает только на элементе формы с атрибутом placeholder; в текущей городской сцене такого поля нет, поэтому отдельное задание появится вместе с формами.']
+    ]],
+    ['Псевдокласс + псевдоэлемент','Сначала указывают условия самого элемента, затем псевдоэлемент через двойное двоеточие.',[
+      ['Пример','.building-sign b:first-of-type::before — before у первого элемента b в заголовке здания.'],
+      ['Важно','Псевдоэлемент — не самостоятельный DOM-узел. Он создаётся браузером для выбранного элемента.']
+    ]]
+  ]};
   const groupingReference={title:'Группировка селекторов',items:[
     ['Запятая — несколько независимых выборок','Каждый селектор в списке выбирает свою группу элементов. Все группы получают одно CSS-правило.',[
       ['Пример','.roof, .building-base выбирает все крыши и все основания.'],
@@ -227,6 +278,18 @@
       {section:'Группировка селекторов',title:'Отличи список от сочетания классов',prompt:'Выбери все здания и отдельно все окна. Не ищи один элемент, у которого одновременно есть классы building и window.',hint:'Здесь нужны две независимые выборки. Раздели .building и .window запятой.',reference:[groupingReference],solution:'.building, .window {\n  \n}',check:{mode:'selector',selector:'.building, .window'}},
       {section:'Группировка селекторов',title:'Собери список из трёх селекторов',prompt:'Одним правилом выбери крыши, основания и входы всех зданий.',hint:'Перечисли три самостоятельных селектора через запятую: .roof, .building-base и .entrance.',reference:[groupingReference],solution:'.roof, .building-base, .entrance {\n  \n}',check:{mode:'selector',selector:'.roof, .building-base, .entrance'}}
 
+      {section:'Сочетания псевдоклассов',title:'Исключи два вида окон',prompt:'Выбери окна, у которых нет ни класса lit, ни класса pink. Оба исключения должны относиться к одному окну.',hint:'Соедини два :not() подряд: сначала исключи .lit, затем .pink.',reference:[pseudoClassReference],solution:'.window:not(.lit):not(.pink) {\n  \n}',check:{mode:'selector',selector:'.window:not(.lit):not(.pink)'}},
+      {section:'Сочетания псевдоклассов',title:'Объедини варианты и исключение',prompt:'Выбери розовые или бирюзовые окна, но исключи из результата все окна с классом lit.',hint:'Внутри :is() перечисли .pink и .teal, после него добавь :not(.lit).',reference:[pseudoClassReference],solution:'.window:is(.pink, .teal):not(.lit) {\n  \n}',check:{mode:'selector',selector:'.window:is(.pink, .teal):not(.lit)'}},
+      {section:'Сочетания псевдоклассов',title:'Выбери этажи двух зданий по условию',prompt:'Выбери каждый второй этаж левого и правого зданий. Центральное здание не должно попасть в выборку.',hint:'Используй :where() для списка двух зданий и :nth-child(even) для этажей.',reference:[pseudoClassReference],solution:':where(.building-left, .building-right) .floor:nth-child(even) {\n  \n}',check:{mode:'selector',selector:':where(.building-left, .building-right) .floor:nth-child(even)'}},
+      {section:'Сочетания псевдоклассов',title:'Найди здание по двум условиям',prompt:'Выбери здания, в которых есть розовое окно, но нет ни одного бирюзового окна.',hint:'Оба условия относятся к зданию: :has() проверяет наличие, :not(:has()) — отсутствие.',reference:[pseudoClassReference],solution:'.building:has(.window.pink):not(:has(.window.teal)) {\n  \n}',check:{mode:'selector',selector:'.building:has(.window.pink):not(:has(.window.teal))'}},
+      {section:'Сочетания псевдоклассов',title:'Собери составное позиционное условие',prompt:'Выбери несветящиеся окна на нечётных этажах центральной башни. На каждом таком этаже нужны окна на чётных позициях.',hint:'Соедини :nth-child(odd) у этажа, :nth-of-type(even) у окна и :not(.lit).',reference:[pseudoClassReference],solution:'.building-center .floor:nth-child(odd) > .window:nth-of-type(even):not(.lit) {\n  \n}',check:{mode:'selector',selector:'.building-center .floor:nth-child(odd) > .window:nth-of-type(even):not(.lit)'}},
+      {section:'Сочетания псевдоклассов',title:'Добавь условие наведения',prompt:'Выбери окна центральной башни только в момент наведения указателя. Светящиеся окна исключи.',hint:'Псевдокласс :hover добавь к окну, а :not(.lit) оставь вторым условием.',reference:[pseudoClassReference],solution:'.building-center .window:hover:not(.lit) {\n  \n}',check:{mode:'selector',selector:'.building-center .window:hover:not(.lit)'}},
+      {section:'Псевдоэлементы',title:'Выбери место перед названием здания',prompt:'Обратись к псевдоэлементу, который создаётся перед текстом названия каждого здания.',hint:'Сначала выбери .building-sign b, затем добавь ::before. У псевдоэлементов два двоеточия.',reference:[pseudoElementReference],solution:'.building-sign b::before {\n  \n}',check:{mode:'selector',selector:'.building-sign b::before'}},
+      {section:'Псевдоэлементы',title:'Выбери место после названия центральной башни',prompt:'Выбери псевдоэлемент после названия только центрального здания.',hint:'Ограничь b через .building-center .building-sign, затем добавь ::after.',reference:[pseudoElementReference],solution:'.building-center .building-sign b::after {\n  \n}',check:{mode:'selector',selector:'.building-center .building-sign b::after'}},
+      {section:'Псевдоэлементы',title:'Выбери первую букву названия',prompt:'Выбери первую букву названия каждого здания.',hint:'Псевдоэлемент первой буквы — ::first-letter.',reference:[pseudoElementReference],solution:'.building-sign b::first-letter {\n  \n}',check:{mode:'selector',selector:'.building-sign b::first-letter'}},
+      {section:'Псевдоэлементы',title:'Выбери первую строку названия',prompt:'Выбери первую отображаемую строку названия центрального здания.',hint:'Используй ::first-line после селектора текста.',reference:[pseudoElementReference],solution:'.building-center .building-sign b::first-line {\n  \n}',check:{mode:'selector',selector:'.building-center .building-sign b::first-line'}},
+      {section:'Псевдоэлементы',title:'Выбери выделенный текст',prompt:'Выбери фрагмент названия здания в момент, когда пользователь выделяет его мышью или клавиатурой.',hint:'Для выделенного пользователем текста используется ::selection.',reference:[pseudoElementReference],solution:'.building-sign b::selection {\n  \n}',check:{mode:'selector',selector:'.building-sign b::selection'}},
+      {section:'Сочетание псевдокласса и псевдоэлемента',title:'Соедини позицию и псевдоэлемент',prompt:'Выбери псевдоэлемент перед первым текстовым элементом b в заголовке центрального здания.',hint:'Сначала выбери центральный заголовок, затем b:first-of-type и в конце ::before.',reference:[pseudoElementReference],solution:'.building-center .building-sign b:first-of-type::before {\n  \n}',check:{mode:'selector',selector:'.building-center .building-sign b:first-of-type::before'}},
     ]},
     colors:{title:'Цвет и фон',tasks:[
       {title:'Подсвети центральную башню',prompt:'Сделай окна центральной башни бирюзовыми (#60a4a1). Окна других зданий не меняй.',hint:'Составной селектор: сначала класс здания, затем через пробел класс окон.',reference:[referenceLibrary.color],solution:'.building-center .window {\n  background: #60a4a1;\n}',check:{selector:'.building-center .window',property:'background-color',expected:'rgb(96, 164, 161)'}}]},
