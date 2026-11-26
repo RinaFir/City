@@ -194,6 +194,7 @@
   ]};
   const topics={
     selectors:{title:'Селекторы',tasks:[
+      {section:'Простые селекторы',title:'Выбери все элементы универсальным селектором',prompt:'Выбери все элементы внутри города. Универсальный селектор обозначает любой HTML-элемент.',hint:'Для выбора любого элемента используется звёздочка *.',reference:[basicSelectorReference],solution:'* {\\n  \\n}',check:{mode:'selector',selector:'*'}},
       {section:'Простые селекторы',title:'Выбери элементы по тегу',prompt:'Выбери все элементы-здания города. В редакторе должна быть только запись селектора и пустой блок правила.',hint:'Здания в сцене — элементы article. Селектор тега записывается без точки.',reference:[basicSelectorReference],solution:'article {\\n  \\n}',check:{mode:'selector',selector:'article'}},
       {section:'Простые селекторы',title:'Выбери левое здание по классу',prompt:'Выбери только левое жилое здание. Остальные здания и элементы не должны попасть в выборку.',hint:'У левого здания есть класс building-left. Класс выбирают точкой перед именем.',reference:[basicSelectorReference],solution:'.building-left {\\n  \\n}',check:{mode:'selector',selector:'.building-left'}},
       {section:'Простые селекторы',title:'Выбери все окна',prompt:'Выбери все окна во всех трёх зданиях. Не выбирай этажи, крыши или сами здания.',hint:'У каждого окна есть класс window.',reference:[basicSelectorReference],solution:'.window {\\n  \\n}',check:{mode:'selector',selector:'.window'}},
