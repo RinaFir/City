@@ -148,6 +148,22 @@
       ['Найти родителя','.building:has(.window.pink) выбирает здание, внутри которого есть розовое окно.'],
       ['Сочетать с дочерним элементом','.building:has(.window.pink) > .roof выбирает крышу именно такого здания.'],
       ['Важно','В отличие от пробела, :has() выбирает внешний элемент, а не внутренний.']
+    ]],
+    [':first-child и :last-child','Выбирают элемент, если он стоит первым или последним среди всех детей своего родителя.',[
+      [':first-child','.floor:first-child — первый этаж в каждом контейнере этажей.'],
+      [':last-child','.floor:last-child — последний этаж в каждом контейнере этажей.'],
+      ['Важно','Позиция считается среди всех дочерних элементов, а не только элементов с нужным классом.']
+    ]],
+    [':nth-child() — номер по порядку','Выбирает детей по их позиции внутри родителя.',[
+      ['Конкретный номер',':nth-child(3) — третий ребёнок. Нумерация начинается с 1.'],
+      ['odd и even','odd — нечётные позиции: 1, 3, 5…; even — чётные: 2, 4, 6…'],
+      ['Формула 2n','Каждый второй элемент: 2, 4, 6… Формула 2n+1 — позиции 1, 3, 5…'],
+      ['Формула 3n','Каждый третий: 3, 6, 9… Формула 3n+1 — 1, 4, 7…'],
+      ['Диапазон','-n+3 выбирает первые три элемента; n+4 — начиная с четвёртого и далее.']
+    ]],
+    [':nth-of-type() — номер среди своего типа','Считает позицию только среди соседних элементов того же HTML-тега.',[
+      ['Пример','i.window:nth-of-type(2) выбирает второе окно среди соседних элементов i.'],
+      ['Отличие от :nth-child()','Если перед окнами есть другой тег, :nth-child() учитывает его позицию, а :nth-of-type() — нет.']
     ]]
   ]};
   const topics={
@@ -166,7 +182,18 @@
       {title:'Объедини два здания через :where()',prompt:'Сделай окна левого и правого зданий бирюзовыми, а окна центральной башни не меняй.',hint:'В :where() перечисли два класса зданий через запятую, а после скобок укажи .window.',reference:[selectorReference],solution:':where(.building-left, .building-right) .window {\\n  background-color: #60a4a1;\\n}',check:{selector:':where(.building-left, .building-right) .window',property:'background-color',expected:'rgb(96, 164, 161)'}},
       {title:'Найди здание с розовыми окнами',prompt:'Выбери крышу здания, внутри которого есть хотя бы одно розовое окно, и сделай её рамку бирюзовой.',hint:':has(.window.pink) проверяет содержимое здания. Затем > .roof выбирает его прямую крышу.',reference:[selectorReference],solution:'.building:has(.window.pink) > .roof {\\n  border-color: #60a4a1;\\n}',check:{selector:'.building:has(.window.pink) > .roof',property:'border-top-color',expected:'rgb(96, 164, 161)'}},
       {title:'Собери составной селектор',prompt:'В центральной башне выбери все окна, которые не светятся и не окрашены в розовый. Сделай их бирюзовыми.',hint:'Соедини выбор здания и окон с двумя исключениями: :not(.lit):not(.pink). Оба условия должны выполняться.',reference:[selectorReference],solution:'.building-center .window:not(.lit):not(.pink) {\\n  background-color: #60a4a1;\\n}',check:{selector:'.building-center .window:not(.lit):not(.pink)',property:'background-color',expected:'rgb(96, 164, 161)'}},
-      {title:'Сочетай :has() и :is()',prompt:'У здания с розовыми окнами выбери крышу или основание. Сделай рамку этих частей бирюзовой.',hint:'Сначала найди здание через :has(.window.pink), затем выбери один из двух его элементов через :is(.roof, .building-base).',reference:[selectorReference],solution:'.building:has(.window.pink) :is(.roof, .building-base) {\\n  border-color: #60a4a1;\\n}',check:{selector:'.building:has(.window.pink) :is(.roof, .building-base)',property:'border-top-color',expected:'rgb(96, 164, 161)'}}
+      {title:'Сочетай :has() и :is()',prompt:'У здания с розовыми окнами выбери крышу или основание. Сделай рамку этих частей бирюзовой.',hint:'Сначала найди здание через :has(.window.pink), затем выбери один из двух его элементов через :is(.roof, .building-base).',reference:[selectorReference],solution:'.building:has(.window.pink) :is(.roof, .building-base) {\\n  border-color: #60a4a1;\\n}',check:{selector:'.building:has(.window.pink) :is(.roof, .building-base)',property:'border-top-color',expected:'rgb(96, 164, 161)'}},
+      {title:'Выбери первые этажи',prompt:'Сделай фон первого этажа каждого здания бирюзовым. Остальные этажи не меняй.',hint:':first-child выбирает первый элемент среди детей своего родителя. Каждый корпус имеет свой контейнер этажей.',reference:[selectorReference],solution:'.floor:first-child {\\n  background-color: #60a4a1;\\n}',check:{selector:'.floor:first-child',property:'background-color',expected:'rgb(96, 164, 161)'}},
+      {title:'Выбери последние этажи',prompt:'Сделай фон последнего этажа каждого здания бирюзовым.',hint:':last-child выбирает последний дочерний элемент. Здесь это последний этаж в каждом .building-floors.',reference:[selectorReference],solution:'.floor:last-child {\\n  background-color: #60a4a1;\\n}',check:{selector:'.floor:last-child',property:'background-color',expected:'rgb(96, 164, 161)'}},
+      {title:'Выбери третий этаж',prompt:'Сделай фон третьего этажа центральной башни бирюзовым. Другие этажи не меняй.',hint:':nth-child(3) выбирает третьего ребёнка. Добавь ограничение на центральное здание.',reference:[selectorReference],solution:'.building-center .floor:nth-child(3) {\\n  background-color: #60a4a1;\\n}',check:{selector:'.building-center .floor:nth-child(3)',property:'background-color',expected:'rgb(96, 164, 161)'}},
+      {title:'Выбери чётные этажи',prompt:'Сделай фон каждого второго этажа всех зданий бирюзовым: 2-й, 4-й, 6-й и так далее.',hint:':nth-child(even) выбирает чётные позиции. Позиция считается отдельно внутри каждого контейнера этажей.',reference:[selectorReference],solution:'.floor:nth-child(even) {\\n  background-color: #60a4a1;\\n}',check:{selector:'.floor:nth-child(even)',property:'background-color',expected:'rgb(96, 164, 161)'}},
+      {title:'Выбери каждый третий этаж',prompt:'Сделай фон третьего, шестого и девятого этажей центральной башни бирюзовым.',hint:':nth-child(3n) выбирает позиции, кратные трём: 3, 6, 9 и далее.',reference:[selectorReference],solution:'.building-center .floor:nth-child(3n) {\\n  background-color: #60a4a1;\\n}',check:{selector:'.building-center .floor:nth-child(3n)',property:'background-color',expected:'rgb(96, 164, 161)'}},
+      {title:'Выбери первый и каждый третий после него',prompt:'Сделай фон этажей центральной башни на позициях 1, 4 и 7 бирюзовым.',hint:':nth-child(3n+1) даёт последовательность 1, 4, 7, 10…',reference:[selectorReference],solution:'.building-center .floor:nth-child(3n+1) {\\n  background-color: #60a4a1;\\n}',check:{selector:'.building-center .floor:nth-child(3n+1)',property:'background-color',expected:'rgb(96, 164, 161)'}},
+      {title:'Ограничь выборку первыми тремя',prompt:'Сделай фон первых трёх этажей правого здания бирюзовым. Остальные не меняй.',hint:':nth-child(-n+3) выбирает позиции от первой до третьей включительно.',reference:[selectorReference],solution:'.building-right .floor:nth-child(-n+3) {\\n  background-color: #60a4a1;\\n}',check:{selector:'.building-right .floor:nth-child(-n+3)',property:'background-color',expected:'rgb(96, 164, 161)'}},
+      {title:'Выбери окна по позиции',prompt:'Сделай бирюзовым фон второго окна на каждом этаже центральной башни.',hint:'Ограничь выборку центральной башней, затем выбери окно по позиции :nth-child(2).',reference:[selectorReference],solution:'.building-center .window:nth-child(2) {\\n  background-color: #60a4a1;\\n}',check:{selector:'.building-center .window:nth-child(2)',property:'background-color',expected:'rgb(96, 164, 161)'}},
+      {title:'Выбери окна через nth-of-type()',prompt:'Сделай бирюзовым фон четвёртого окна на каждом этаже центральной башни.',hint:':nth-of-type(4) считает позицию среди элементов того же тега. В каждом ряду окна — элементы i.',reference:[selectorReference],solution:'.building-center .window:nth-of-type(4) {\\n  background-color: #60a4a1;\\n}',check:{selector:'.building-center .window:nth-of-type(4)',property:'background-color',expected:'rgb(96, 164, 161)'}},
+      {title:'Сочетай позицию и исключение',prompt:'Сделай бирюзовыми нечётные окна центральной башни, кроме светящихся.',hint:'Сначала выбери нечётные окна через :nth-child(odd), затем исключи класс lit через :not(.lit).',reference:[selectorReference],solution:'.building-center .window:nth-child(odd):not(.lit) {\\n  background-color: #60a4a1;\\n}',check:{selector:'.building-center .window:nth-child(odd):not(.lit)',property:'background-color',expected:'rgb(96, 164, 161)'}},
+      {title:'Собери формулу с условием',prompt:'Выбери в центральной башне каждое третье окно, начиная с первого, но исключи розовые. Сделай фон оставшихся окон бирюзовым.',hint:'Соедини :nth-child(3n+1) и :not(.pink). Оба условия должны выполняться одновременно.',reference:[selectorReference],solution:'.building-center .window:nth-child(3n+1):not(.pink) {\\n  background-color: #60a4a1;\\n}',check:{selector:'.building-center .window:nth-child(3n+1):not(.pink)',property:'background-color',expected:'rgb(96, 164, 161)'}}
     ]},
     colors:{title:'Цвет и фон',tasks:[
       {title:'Подсвети центральную башню',prompt:'Сделай окна центральной башни бирюзовыми (#60a4a1). Окна других зданий не меняй.',hint:'Составной селектор: сначала класс здания, затем через пробел класс окон.',reference:[referenceLibrary.color],solution:'.building-center .window {\n  background: #60a4a1;\n}',check:{selector:'.building-center .window',property:'background-color',expected:'rgb(96, 164, 161)'}}]},
@@ -207,7 +234,7 @@
     if(pending||done)return;
     if(!input.value.trim()){setStatus('Сначала напиши CSS.','bad');return;}
     const id=String(++request);pending=id;setStatus('Проверка…');
-    frame.contentWindow.postMessage({type:'NOCTURNE_CHECK_TASK',id,check:current().check},'*');
+    frame.contentWindow.postMessage({type:'NOCTURNE_CHECK_TASK',id,check:{checks:current().checks||[current().check]}},'*');
     window.setTimeout(()=>{if(pending===id){pending=null;setStatus('Город не ответил. Повтори проверку.','bad');}},1800);
   });
   window.addEventListener('message',event=>{
