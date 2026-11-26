@@ -243,7 +243,7 @@
     if(pending||done)return;
     if(!input.value.trim()){setStatus('Сначала напиши CSS.','bad');return;}
     const id=String(++request);pending=id;setStatus('Проверка…');
-    frame.contentWindow.postMessage({type:'NOCTURNE_CHECK_TASK',id,check:{checks:current().checks||[current().check]}},'*');
+    frame.contentWindow.postMessage({type:'NOCTURNE_CHECK_TASK',id,check:current().check?.mode==='selector'?current().check:{checks:current().checks||[current().check]}},'*');
     window.setTimeout(()=>{if(pending===id){pending=null;setStatus('Город не ответил. Повтори проверку.','bad');}},1800);
   });
   window.addEventListener('message',event=>{
