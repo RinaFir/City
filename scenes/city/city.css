@@ -54,3 +54,9 @@ body{overflow:hidden}
 .scene-caption span:first-child{display:flex;align-items:center;gap:7px}.scene-caption i{width:6px;height:6px;border-radius:50%;background:#69c1b4;box-shadow:0 0 8px #69c1b4}
 @media(max-width:600px){.city{height:470px}.district{inset:auto 2% 13%;height:69%;gap:5px}.building-left,.building-right{width:29%}.building-center{width:38%}.building-sign{padding:0 4px;font-size:6px}.building-floors{padding:6px 3px;gap:3px}.floor{gap:2px;padding:2px}.building-base{padding:0 5px;font-size:6px}.scene-caption{font-size:7px;letter-spacing:.3px;left:10px;right:10px}.city-label{left:14px;top:14px}.moon{width:55px;height:55px}.skyline{bottom:18%}}
 @media(max-width:360px){.building-sign b{font-size:5px}.scene-caption span:last-child{font-size:6px}.city-label strong{font-size:15px}}
+
+/* Visible selectors on each building */
+.building-sign{height:36px;position:relative;flex-wrap:wrap;column-gap:5px;padding:3px 7px}
+.building-sign b{font-size:7px}
+.selector-label{display:block;flex-basis:100%;font:7px/1 var(--mono,monospace);letter-spacing:.2px;color:#8fd0c5;text-align:right}
+@media(max-width:600px){.building-sign{height:37px;padding:3px 3px}.building-sign b{font-size:5px}.selector-label{font-size:6px}}
