@@ -17,3 +17,16 @@
 .reference-item p{font-size:10px;line-height:1.5;color:#aab6cd;margin:0}
 .reference-item p code{color:#d7c2ce}
 .reference-note{font-size:10px;line-height:1.5;color:#7f8da9;margin:8px 0 0}
+
+.reference-property{border-top:1px solid #222b40;padding:7px 0}
+.reference-property>summary{display:grid;grid-template-columns:minmax(105px,.72fr) 1.6fr;gap:9px;align-items:start;cursor:pointer;list-style:none}
+.reference-property>summary::-webkit-details-marker{display:none}
+.reference-property>summary:after{content:"+";grid-column:1;grid-row:1;color:var(--teal);font:12px var(--mono);justify-self:end;display:none}
+.reference-property[open]>summary:after{content:"−"}
+.reference-property>summary code{font:10px var(--mono);color:#e5a2b9;overflow-wrap:anywhere}
+.reference-property>summary span{font-size:10px;line-height:1.5;color:#aab6cd}
+.reference-parts{margin:8px 0 2px 12px;padding-left:10px;border-left:1px solid #34435a}
+.reference-part{display:grid;grid-template-columns:minmax(85px,.65fr) 1.7fr;gap:8px;padding:5px 0}
+.reference-part b{font-size:10px;font-weight:600;color:#8fc8c0}
+.reference-part p{font-size:10px;line-height:1.5;color:#aab6cd;margin:0}
+@media(max-width:520px){.reference-property>summary{grid-template-columns:1fr;gap:3px}.reference-property>summary code{font-size:10px}.reference-part{grid-template-columns:1fr;gap:2px}}
