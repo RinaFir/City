@@ -104,9 +104,43 @@
   };
   const renderReference=groups=>groups.map(group=>'<section class="reference-group"><h3>'+group.title+'</h3>'+group.items.map(([name,description,parts])=>'<details class="reference-property"><summary><code>'+name+'</code><span>'+description+'</span></summary>'+(parts&&parts.length?'<div class="reference-parts">'+parts.map(([label,detail])=>'<details class="reference-part"><summary>'+label+'</summary><p>'+detail+'</p></details>').join('')+'</div>':'')+'</details>').join('')+'</section>').join('')+'<p class="reference-note">Нажми на свойство, чтобы раскрыть его части. Нажми на часть, чтобы увидеть варианты и значения.</p>';
 
+  const selectorReference={title:'Селекторы и связи',items:[
+    ['.class','Выбирает все элементы, у которых есть указанный класс.',[
+      ['Один класс','Например, .window выбирает все окна города. Точка перед именем означает класс.'],
+      ['Несколько классов','.window.lit выбирает элементы, у которых одновременно есть оба класса. Между классами пробела нет.'],
+      ['Класс у конкретного элемента','.building-left выбирает левое здание. Класс можно сочетать с другими условиями.']
+    ]],
+    ['*','Универсальный селектор: выбирает любой элемент.',[
+      ['Без ограничения','* выбирает все элементы страницы.'],
+      ['Внутри блока','.building-left * выбирает все элементы внутри левого здания, но не само здание.']
+    ]],
+    ['Список селекторов','Запятая объединяет независимые выборки.',[
+      ['Пример','.roof, .building-base { ... } применяет одно правило и к крышам, и к основаниям зданий.'],
+      ['Важно','Запятая означает «или». Без запятой селекторы обычно уточняют одну и ту же выборку.']
+    ]],
+    ['Потомок: пробел','Выбирает элементы внутри другого элемента на любой глубине.',[
+      ['Пример','.building .window — все окна внутри любого здания, в том числе глубоко вложенные.'],
+      ['Порядок','Сначала указывают внешний элемент, затем внутренний.']
+    ]],
+    ['Прямой ребёнок: >','Выбирает только непосредственных детей элемента.',[
+      ['Пример','.building > .roof — крыша, которая находится прямо внутри здания.'],
+      ['Отличие от пробела','Промежуточные вложенные элементы не подходят.']
+    ]],
+    ['Соседи: + и ~','Выбирают элементы, расположенные после другого элемента на том же уровне.',[
+      ['+ следующий сосед','.floor + .floor выбирает этаж, который идёт сразу после другого этажа.'],
+      ['~ последующие соседи','.floor ~ .floor выбирает все этажи после предыдущего подходящего этажа.']
+    ]]
+  ]};
   const topics={
     selectors:{title:'Селекторы',tasks:[
-      {title:'Подсвети левое здание',prompt:'Сделай рамку левого жилого здания бирюзовой (#60a4a1). Измени только это здание.',hint:'Выбери класс .building-left. Свойство border-color задаёт цвет рамки.',reference:[referenceLibrary.frame,referenceLibrary.outline,referenceLibrary.effects,referenceLibrary.color],solution:'.building-left {\n  border-color: #60a4a1;\n}',check:{selector:'.building-left',property:'border-top-color',expected:'rgb(96, 164, 161)'}}]},
+      {title:'Выбери левое здание',prompt:'Сделай рамку левого жилого здания бирюзовой (#60a4a1). Остальные здания не меняй.',hint:'Класс левого здания — .building-left. Точка перед именем означает, что это селектор класса.',reference:[selectorReference],solution:'.building-left {\\n  border-color: #60a4a1;\\n}',check:{selector:'.building-left',property:'border-top-color',expected:'rgb(96, 164, 161)'}},
+      {title:'Выбери только светящиеся окна',prompt:'Сделай светящиеся окна города бирюзовыми. Обычные окна не меняй.',hint:'У светящихся окон есть сразу два класса: window и lit. Запиши их подряд, без пробела.',reference:[selectorReference],solution:'.window.lit {\\n  background-color: #60a4a1;\\n}',check:{selector:'.window.lit',property:'background-color',expected:'rgb(96, 164, 161)'}},
+      {title:'Выбери все элементы внутри левого здания',prompt:'Добавь сплошной бирюзовый контур всем элементам внутри левого здания. Само здание не должно получить этот контур.',hint:'Универсальный селектор * выбирает любые элементы. Поставь его после .building-left через пробел.',reference:[selectorReference],solution:'.building-left * {\\n  outline: 1px solid #60a4a1;\\n}',check:{selector:'.building-left .window',property:'outline-color',expected:'rgb(96, 164, 161)'}},
+      {title:'Выбери крыши и основания',prompt:'Сделай крыши и основания всех трёх зданий бирюзовыми по цвету рамки. Остальные части зданий не меняй.',hint:'Запятая объединяет две независимые выборки: .roof и .building-base.',reference:[selectorReference],solution:'.roof, .building-base {\\n  border-color: #60a4a1;\\n}',checks:[{selector:'.roof',property:'border-top-color',expected:'rgb(96, 164, 161)'},{selector:'.building-base',property:'border-top-color',expected:'rgb(96, 164, 161)'}]},
+      {title:'Найди окна внутри центральной башни',prompt:'Сделай все окна центральной башни бирюзовыми. Окна двух других зданий не меняй.',hint:'Пробел означает «внутри»: сначала укажи здание, затем его окна.',reference:[selectorReference],solution:'.building-center .window {\\n  background-color: #60a4a1;\\n}',check:{selector:'.building-center .window',property:'background-color',expected:'rgb(96, 164, 161)'}},
+      {title:'Выбери только прямую крышу здания',prompt:'Сделай верхнюю рамку крыш бирюзовой, используя связь «непосредственный ребёнок».',hint:'Знак > выбирает только прямых детей. Крыша находится непосредственно внутри article.building.',reference:[selectorReference],solution:'.building > .roof {\\n  border-top-color: #60a4a1;\\n}',check:{selector:'.building > .roof',property:'border-top-color',expected:'rgb(96, 164, 161)'}},
+      {title:'Выбери этажи после первого',prompt:'Сделай верхнюю рамку всех этажей, которые идут сразу после другого этажа, бирюзовой.',hint:'Знак + выбирает непосредственного следующего соседа. Этажи расположены рядом внутри .building-floors.',reference:[selectorReference],solution:'.floor + .floor {\\n  border-top: 1px solid #60a4a1;\\n}',check:{selector:'.floor + .floor',property:'border-top-color',expected:'rgb(96, 164, 161)'}}
+    ]},
     colors:{title:'Цвет и фон',tasks:[
       {title:'Подсвети центральную башню',prompt:'Сделай окна центральной башни бирюзовыми (#60a4a1). Окна других зданий не меняй.',hint:'Составной селектор: сначала класс здания, затем через пробел класс окон.',reference:[referenceLibrary.color],solution:'.building-center .window {\n  background: #60a4a1;\n}',check:{selector:'.building-center .window',property:'background-color',expected:'rgb(96, 164, 161)'}}]},
     spacing:{title:'Размеры и расстояния',tasks:[
