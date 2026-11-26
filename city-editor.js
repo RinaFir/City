@@ -250,6 +250,8 @@
     $('reference-content').closest('details').open=false;
     $('solution').textContent=task.solution;
     $('task-count').textContent=String(index+1).padStart(2,'0')+' / '+String(data.tasks.length).padStart(2,'0');
+    $('previous').disabled=index===0;
+    $('skip').disabled=index===data.tasks.length-1;
     $('progress').style.width=((index+1)/data.tasks.length*100)+'%';
     input.value='';pending=null;done=false;$('check').disabled=false;
     document.querySelectorAll('.help[open]').forEach(x=>x.open=false);
@@ -262,7 +264,8 @@
   frame.addEventListener('load',apply);
   $('reset').addEventListener('click',()=>{pending=null;done=false;input.value='';$('check').disabled=false;apply();setStatus('Код очищен.');});
   $('insert').addEventListener('click',()=>{input.value=current().solution;apply();setStatus('Решение вставлено в редактор.');});
-  $('skip').addEventListener('click',()=>{if(index<topics[topic].tasks.length-1){index++;render();return;}setStatus('В этом разделе больше нет заданий. Выбери другой раздел сверху.');});
+  $('previous').addEventListener('click',()=>{if(index>0){index--;render();}});
+  $('skip').addEventListener('click',()=>{if(index<topics[topic].tasks.length-1){index++;render();}});
   $('check').addEventListener('click',()=>{
     if(pending||done)return;
     if(!input.value.trim()){setStatus('Сначала напиши CSS.','bad');return;}
