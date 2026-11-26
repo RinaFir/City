@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0e1122">
+  <meta name="description" content="Интерактивная игровая лаборатория HTML и CSS. Учись через эксперименты.">
+  <title>NOCTURNE CSS City — игровая лаборатория</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="./" aria-label="Code Arcade — главная">
+        <span class="brand-mark">C<span>A</span></span>
+        <span><strong>CODE ARCADE</strong><small>игровая лаборатория</small></span>
+      </a>
+      <div class="top-meta"><span class="status-dot"></span><span>Лаборатория запущена</span><span class="top-divider"></span><span id="progress-label">3 интерактивных мира</span></div>
+    </header>
+
+    <main>
+      <section class="intro">
+        <div class="eyebrow"><span class="eyebrow-line"></span> ОБУЧЕНИЕ ЧЕРЕЗ ЭКСПЕРИМЕНТ</div>
+        <h1>Код становится<br><em>видимым.</em></h1>
+        <p class="intro-copy">Не зубри свойства. Меняй код, двигай объекты, строй структуры и наблюдай, как браузер выполняет твои команды.</p>
+        <div class="intro-tags"><span>HTML</span><span>CSS</span><span>JavaScript</span><span>Практика</span></div>
+      </section>
+
+      <section class="city-preview" aria-labelledby="city-preview-title">
+        <div class="city-preview-heading"><div><span class="eyebrow"><span class="eyebrow-line"></span> ИГРОВОЙ МИР / SECTOR 01</span><h2 id="city-preview-title">Город — <em>твоя лаборатория.</em></h2></div><span class="city-preview-meta">LIVE DOM / CSS READY</span></div>
+        <iframe class="city-frame" src="./scenes/city/index.html" title="Ночной город с настоящими DOM-объектами" loading="eager"></iframe>
+        <p class="city-preview-note">Каждое окно, этаж и здание — отдельный HTML-элемент. Пиши обычный CSS и сразу смотри, как он меняет город.</p>
+        <section class="task-workspace" aria-labelledby="task-title">
+          <div class="task-heading">
+            <div><span class="eyebrow"><span class="eyebrow-line"></span> CSS TRAINING / TASKS</span><h3 id="task-title">Задание <span id="task-number">01 / 04</span></h3></div>
+            <span class="editor-live"><i></i> CSS ПРИМЕНЯЕТСЯ СРАЗУ</span>
+          </div>
+          <div class="task-condition"><span class="task-label">УСЛОВИЕ</span><p id="task-prompt">Сделай углы всех окон слегка скруглёнными: радиус должен быть 4 пикселя.</p></div>
+          <div class="task-tools">
+            <details class="task-disclosure"><summary>Справочник CSS</summary><div class="task-disclosure-content"><p><code>селектор { свойство: значение; }</code></p><p>Селектор выбирает элементы сцены. Свойство определяет, что меняется, а значение — как именно.</p><p><code>.window</code> — все окна; <code>.building-center</code> — центральное здание; <code>:hover</code> — состояние при наведении.</p></div></details>
+            <details class="task-disclosure"><summary>Подсказка</summary><div class="task-disclosure-content" id="task-hint">Выбери класс <code>.window</code> и используй свойство <code>border-radius</code>.</div></details>
+            <details class="task-disclosure"><summary>Показать решение</summary><div class="task-disclosure-content"><pre id="task-solution">.window {\n  border-radius: 4px;\n}</pre><button type="button" id="insert-solution" class="task-small-button">Вставить решение в редактор</button></div></details>
+          </div>
+          <label class="sr-only" for="city-css-input">Твой CSS-код</label>
+          <textarea id="city-css-input" spellcheck="false" autocapitalize="off" autocomplete="off" aria-describedby="task-status" placeholder="Напиши CSS здесь…"></textarea>
+          <div class="task-actions">
+            <span id="task-status" class="task-status" role="status" aria-live="polite">Изменения сразу видны в городе.</span>
+            <div class="task-buttons"><button type="button" id="task-reset" class="task-button secondary">Сбросить</button><button type="button" id="task-skip" class="task-button secondary">Пропустить</button><button type="button" id="task-check" class="task-button primary">Проверить</button></div>
+          </div>
+          <div class="task-progress"><span id="task-progress-fill"></span></div>
+        </section>
+      </section>
+
+      <section class="world-grid" aria-label="Игровые миры">
+        <button class="world-card selector-card active" data-world="selectors">
+          <span class="world-index">01 / ВЫБОР</span>
+          <span class="world-art selector-art"><i class="node n1"></i><i class="node n2"></i><i class="node n3"></i><i class="node n4"></i><b>CSS</b></span>
+          <span class="world-title">Selector Lab</span>
+          <span class="world-description">Находи элементы, задавай условия, создавай псевдоэлементы.</span>
+          <span class="world-footer"><span class="world-status live">ДОСТУПНО</span><span class="world-arrow">↗</span></span>
+        </button>
+        <button class="world-card flex-card" data-world="flex">
+          <span class="world-index">02 / ПОЗИЦИЯ</span>
+          <span class="world-art flex-art"><i>♟</i><i>♜</i><i>♞</i><i>♟</i><b>FLEX</b></span>
+          <span class="world-title">Flex Arena</span>
+          <span class="world-description">Расставляй отряд. Меняй направление, выравнивание и порядок.</span>
+          <span class="world-footer"><span class="world-status live">ДОСТУПНО</span><span class="world-arrow">↗</span></span>
+        </button>
+        <button class="world-card grid-card" data-world="grid">
+          <span class="world-index">03 / СЕТКА</span>
+          <span class="world-art grid-art"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+          <span class="world-title">Grid Garden</span>
+          <span class="world-description">Планируй сад: колонки, строки, промежутки и области.</span>
+          <span class="world-footer"><span class="world-status live">ДОСТУПНО</span><span class="world-arrow">↗</span></span>
+        </button>
+      </section>
+
+      <section class="workbench" id="workbench">
+        <div class="workbench-head">
+          <div><div class="eyebrow"><span class="eyebrow-line"></span><span id="module-kicker">МИР 01 · CSS SELECTORS</span></div><h2 id="module-title">Selector Lab</h2></div>
+          <div class="level-chip"><span class="level-dot"></span><span id="module-level">ПРАКТИКА · 01</span></div>
+        </div>
+        <div class="lesson-layout">
+          <aside class="lesson-aside">
+            <div class="lesson-label">ТВОЯ МИССИЯ</div>
+            <h3 id="mission-title">Найди карточки с изображением</h3>
+            <p id="mission-copy">Выбери элементы .sample-card, внутри которых есть изображение. Подсказка: условие можно записать прямо в селекторе.</p>
+            <div class="mission-hint"><span class="hint-icon">i</span><span id="mission-hint">Попробуй :has(.sample-visual). Это проверка содержимого элемента.</span></div>
+            <div class="lesson-label concept-label">ЧТО ИЗУЧАЕМ</div>
+            <div class="concept-list" id="concept-list"><span class="concept current">:has()</span><span class="concept">:not()</span><span class="concept">:is()</span><span class="concept">::before / ::after</span></div>
+            <button class="reset-button" id="reset-world">↺ Сбросить эксперимент</button>
+          </aside>
+          <section class="experiment">
+            <div class="experiment-top"><span>ЖИВАЯ СЦЕНА</span><span class="scene-count" id="scene-count">0 элементов выбрано</span></div>
+            <div class="scene" id="selector-scene">
+              <article class="sample-card" data-kind="image"><span class="sample-visual landscape">▧</span><span class="sample-name">Пейзаж</span><small>.card · img</small></article>
+              <article class="sample-card" data-kind="text"><span class="sample-visual text-visual">Aa</span><span class="sample-name">Типографика</span><small>.card · без img</small></article>
+              <article class="sample-card featured" data-kind="image"><span class="sample-visual portrait">◉</span><span class="sample-name">Портрет</span><small>.card.active · img</small></article>
+              <article class="sample-card" data-kind="empty"><span class="sample-visual empty-visual">＋</span><span class="sample-name">Пустая</span><small>.card · пусто</small></article>
+            </div>
+            <div class="code-panel">
+              <div class="code-panel-head"><span>ТВОЙ CSS-СЕЛЕКТОР</span><span class="editor-live"><i></i> LIVE PREVIEW</span></div>
+              <div class="code-input-wrap"><span class="code-line">1</span><input id="selector-input" spellcheck="false" autocomplete="off" autocapitalize="off" value=".sample-card:has(.landscape)" aria-label="CSS селектор"><button id="apply-selector" class="apply-button">ПРИМЕНИТЬ ↗</button></div>
+              <div class="selector-feedback" id="selector-feedback" aria-live="polite">Измени селектор и посмотри, какие карточки подсветятся.</div>
+            </div>
+            <div class="quick-selectors"><span>ПОПРОБУЙ:</span><button data-selector=".card:has(.sample-visual)">:has()</button><button data-selector=".card:not(.featured)">:not()</button><button data-selector=":is(.featured, [data-kind='empty'])">:is()</button><button data-selector=".card:nth-child(2n)">:nth-child()</button></div>
+          </section>
+        </div>
+      </section>
+
+      <section class="how-it-works">
+        <div><span class="section-number">01</span><h2>Сначала действие.<br><em>Потом объяснение.</em></h2></div>
+        <p>Каждый эксперимент связан с настоящими свойствами браузера. Результат не нарисован заранее: он меняется от твоего CSS. Ошибка — это тоже результат, который можно исследовать.</p>
+      </section>
+      <footer><span>CODE ARCADE <span class="footer-sep">/</span> BUILD 0.1</span><span>Сделано для любопытных умов</span></footer>
+    </main>
+  </div>
+  <script src="./app.js"></script>
+  <script src="./city-editor.js"></script>
+</body>
+</html>
