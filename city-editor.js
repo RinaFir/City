@@ -206,6 +206,12 @@
     ]]
   ]};
   const topics={
+    frame:{title:'Рамки',tasks:[
+      {section:'Основы рамки',title:'Добавь сплошную рамку окнам',prompt:'Добавь окнам центральной башни рамку толщиной 2px, сплошную, бирюзового цвета.',hint:'Сокращённая запись border объединяет толщину, стиль линии и цвет.',reference:[referenceLibrary.frame],solution:'.building-center .window {\\n  border: 2px solid #60a4a1;\\n}',check:{selector:'.building-center .window',property:'border-top-width',expected:'2px'}}
+    ]},
+    outline:{title:'Внешний контур',tasks:[
+      {section:'Основы внешнего контура',title:'Обведи центральную башню снаружи',prompt:'Добавь центральной башне внешний контур толщиной 2px, штриховой, бирюзовый. Контур не должен менять размеры элемента.',hint:'Для внешнего контура используется outline, а не border.',reference:[referenceLibrary.outline],solution:'.building-center {\\n  outline: 2px dashed #60a4a1;\\n}',check:{selector:'.building-center',property:'outline-width',expected:'2px'}}
+    ]},
     selectors:{title:'Селекторы',tasks:[
       {section:'Простые селекторы',title:'Выбери все элементы универсальным селектором',prompt:'Выбери все элементы внутри города. Универсальный селектор обозначает любой HTML-элемент.',hint:'Для выбора любого элемента используется звёздочка *.',reference:[basicSelectorReference],solution:'* {\n  \n}',check:{mode:'selector',selector:'*'}},
       {section:'Простые селекторы',title:'Выбери элементы по тегу',prompt:'Выбери все элементы-здания города. В редакторе должна быть только запись селектора и пустой блок правила.',hint:'Здания в сцене — элементы article. Селектор тега записывается без точки.',reference:[basicSelectorReference],solution:'article {\n  \n}',check:{mode:'selector',selector:'article'}},
