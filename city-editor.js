@@ -1,6 +1,6 @@
 (() => {
   const $ = id => document.getElementById(id);
-  const frame=$('.city-frame'), input=$('css-input'), status=$('status');
+  const frame=document.querySelector('.city-frame'), input=$('css-input'), status=$('status');
   const topics={
     selectors:{title:'Селекторы',tasks:[
       {title:'Выбери здание',prompt:'Измени внешний вид левого жилого здания. Используй его класс .building-left.',hint:'Класс уже есть в списке «Элементы города». Нажми на него, чтобы вставить селектор.',solution:'.building-left {\n  border-color: #60a4a1;\n}',check:{selector:'.building-left',property:'border-top-color',expected:'rgb(96, 164, 161)'}}]},
@@ -36,7 +36,7 @@
   frame.addEventListener('load',apply);
   $('reset').addEventListener('click',()=>{pending=null;done=false;input.value='';$('check').disabled=false;apply();setStatus('Код очищен.');});
   $('insert').addEventListener('click',()=>{input.value=current().solution;apply();setStatus('Решение вставлено в редактор.');});
-  $('skip').addEventListener('click',()=>{index=(index+1)%topics[topic].tasks.length;render();});
+  $('skip').addEventListener('click',()=>{const order=Object.keys(topics);topic=order[(order.indexOf(topic)+1)%order.length];index=0;render();});
   $('check').addEventListener('click',()=>{
     if(pending||done)return;
     if(!input.value.trim()){setStatus('Сначала напиши CSS.','bad');return;}
