@@ -192,6 +192,19 @@
       ['Отличие от :nth-child()','Если перед окнами есть другой тег, :nth-child() учитывает его позицию, а :nth-of-type() — нет.']
     ]]
   ]};
+  const groupingReference={title:'Группировка селекторов',items:[
+    ['Запятая — несколько независимых выборок','Каждый селектор в списке выбирает свою группу элементов. Все группы получают одно CSS-правило.',[
+      ['Пример','.roof, .building-base выбирает все крыши и все основания.'],
+      ['Логика','Запятая означает «ИЛИ»: элементу достаточно соответствовать одному из селекторов.']
+    ]],
+    ['Список и сочетание — не одно и то же','Запятая разделяет самостоятельные селекторы. Запись без запятой объединяет признаки или связи в одной выборке.',[
+      ['Через запятую','.building, .window выбирает здания И отдельно окна.'],
+      ['Без запятой','.building.window ищет один элемент, у которого одновременно есть оба класса.']
+    ]],
+    ['Общее правило для списка','После запятой можно указать ещё один, третий и последующие селекторы.',[
+      ['Пример','.roof, .building-base, .entrance выбирает три разные группы элементов.']
+    ]]
+  ]};
   const topics={
     selectors:{title:'Селекторы',tasks:[
       {section:'Простые селекторы',title:'Выбери все элементы универсальным селектором',prompt:'Выбери все элементы внутри города. Универсальный селектор обозначает любой HTML-элемент.',hint:'Для выбора любого элемента используется звёздочка *.',reference:[basicSelectorReference],solution:'* {\\n  \\n}',check:{mode:'selector',selector:'*'}},
@@ -203,7 +216,11 @@
       {section:'Простые селекторы',title:'Выбери жилое здание по значению атрибута',prompt:'Выбери только жилое здание, используя значение data-building="residential".',hint:'Для точного совпадения значение атрибута записывают в кавычках после знака =.',reference:[basicSelectorReference],solution:'[data-building="residential"] {\\n  \\n}',check:{mode:'selector',selector:'[data-building="residential"]'}},
       {section:'Сочетание признаков одного элемента',title:'Выбери светящиеся окна',prompt:'Выбери только окна, у которых одновременно есть классы window и lit.',hint:'Два класса одного элемента записываются подряд. Между ними нет пробела.',reference:[basicSelectorReference],solution:'.window.lit {\\n  \\n}',check:{mode:'selector',selector:'.window.lit'}},
       {section:'Сочетание признаков одного элемента',title:'Отличи тег от класса',prompt:'Выбери элементы i с классом window. Не выбирай другие элементы, даже если у них есть похожий класс.',hint:'Сначала укажи имя HTML-тега, затем сразу класс через точку: i.window.',reference:[basicSelectorReference],solution:'i.window {\\n  \\n}',check:{mode:'selector',selector:'i.window'}},
-      {section:'Сочетание признаков одного элемента',title:'Найди бирюзовые светящиеся окна',prompt:'Выбери окна, у которых одновременно есть три класса: window, lit и teal.',hint:'Все три класса должны относиться к одному элементу. Запиши их подряд без пробелов.',reference:[basicSelectorReference],solution:'.window.lit.teal {\\n  \\n}',check:{mode:'selector',selector:'.window.lit.teal'}}
+      {section:'Сочетание признаков одного элемента',title:'Найди бирюзовые светящиеся окна',prompt:'Выбери окна, у которых одновременно есть три класса: window, lit и teal.',hint:'Все три класса должны относиться к одному элементу. Запиши их подряд без пробелов.',reference:[basicSelectorReference],solution:'.window.lit.teal {\\n  \\n}',check:{mode:'selector',selector:'.window.lit.teal'}},
+      {section:'Группировка селекторов',title:'Выбери крыши и основания',prompt:'Выбери все крыши и все основания зданий одним правилом. Это две самостоятельные группы элементов.',hint:'Запятая разделяет независимые селекторы. Укажи .roof, затем .building-base.',reference:[groupingReference],solution:'.roof, .building-base {\\n  \\n}',check:{mode:'selector',selector:'.roof, .building-base'}},
+      {section:'Группировка селекторов',title:'Отличи список от сочетания классов',prompt:'Выбери все здания и отдельно все окна. Не ищи один элемент, у которого одновременно есть классы building и window.',hint:'Здесь нужны две независимые выборки. Раздели .building и .window запятой.',reference:[groupingReference],solution:'.building, .window {\\n  \\n}',check:{mode:'selector',selector:'.building, .window'}},
+      {section:'Группировка селекторов',title:'Собери список из трёх селекторов',prompt:'Одним правилом выбери крыши, основания и входы всех зданий.',hint:'Перечисли три самостоятельных селектора через запятую: .roof, .building-base и .entrance.',reference:[groupingReference],solution:'.roof, .building-base, .entrance {\\n  \\n}',check:{mode:'selector',selector:'.roof, .building-base, .entrance'}}
+
     ]},
     colors:{title:'Цвет и фон',tasks:[
       {title:'Подсвети центральную башню',prompt:'Сделай окна центральной башни бирюзовыми (#60a4a1). Окна других зданий не меняй.',hint:'Составной селектор: сначала класс здания, затем через пробел класс окон.',reference:[referenceLibrary.color],solution:'.building-center .window {\n  background: #60a4a1;\n}',check:{selector:'.building-center .window',property:'background-color',expected:'rgb(96, 164, 161)'}}]},
