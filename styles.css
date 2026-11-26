@@ -19,14 +19,16 @@
 .reference-note{font-size:10px;line-height:1.5;color:#7f8da9;margin:8px 0 0}
 
 .reference-property{border-top:1px solid #222b40;padding:7px 0}
-.reference-property>summary{display:grid;grid-template-columns:minmax(105px,.72fr) 1.6fr;gap:9px;align-items:start;cursor:pointer;list-style:none}
-.reference-property>summary::-webkit-details-marker{display:none}
-.reference-property>summary:after{content:"+";grid-column:1;grid-row:1;color:var(--teal);font:12px var(--mono);justify-self:end;display:none}
+.reference-property>summary{display:grid;grid-template-columns:minmax(95px,.72fr) 1.6fr 14px;gap:9px;align-items:start;cursor:pointer;list-style:none}
+.reference-property>summary::-webkit-details-marker,.reference-part>summary::-webkit-details-marker{display:none}
+.reference-property>summary:after{content:"+";grid-column:3;grid-row:1;color:var(--teal);font:13px var(--mono);text-align:right}
 .reference-property[open]>summary:after{content:"−"}
 .reference-property>summary code{font:10px var(--mono);color:#e5a2b9;overflow-wrap:anywhere}
 .reference-property>summary span{font-size:10px;line-height:1.5;color:#aab6cd}
-.reference-parts{margin:8px 0 2px 12px;padding-left:10px;border-left:1px solid #34435a}
-.reference-part{display:grid;grid-template-columns:minmax(85px,.65fr) 1.7fr;gap:8px;padding:5px 0}
-.reference-part b{font-size:10px;font-weight:600;color:#8fc8c0}
-.reference-part p{font-size:10px;line-height:1.5;color:#aab6cd;margin:0}
-@media(max-width:520px){.reference-property>summary{grid-template-columns:1fr;gap:3px}.reference-property>summary code{font-size:10px}.reference-part{grid-template-columns:1fr;gap:2px}}
+.reference-parts{margin:9px 0 2px 10px;padding-left:12px;border-left:1px solid #34435a}
+.reference-part{padding:5px 0;border-top:1px solid #202a40}
+.reference-part>summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;color:#8fc8c0;font-size:10px;font-weight:600}
+.reference-part>summary:after{content:"+";font:12px var(--mono);color:#8fc8c0}
+.reference-part[open]>summary:after{content:"−"}
+.reference-part p{font-size:10px;line-height:1.55;color:#aab6cd;margin:6px 0 2px}
+@media(max-width:520px){.reference-property>summary{grid-template-columns:minmax(0,1fr) 14px;gap:3px}.reference-property>summary code{grid-column:1;grid-row:1;font-size:10px}.reference-property>summary span{grid-column:1;grid-row:2}.reference-property>summary:after{grid-column:2;grid-row:1}.reference-parts{margin-left:5px}.reference-part{display:block}}
