@@ -102,7 +102,7 @@
       ]]
     ]}
   };
-  const renderReference=groups=>groups.map(group=>'<section class="reference-group"><h3>'+group.title+'</h3>'+group.items.map(([name,description,parts])=>'<details class="reference-property"><summary><code>'+name+'</code><span>'+description+'</span></summary>'+(parts&&parts.length?'<div class="reference-parts">'+parts.map(([label,detail])=>'<div class="reference-part"><b>'+label+'</b><p>'+detail+'</p></div>').join('')+'</div>':'')+'</details>').join('')+'</section>').join('')+'<p class="reference-note">Раскрывай свойства, чтобы посмотреть их варианты и значения. Один результат часто можно получить разными способами.</p>';
+  const renderReference=groups=>groups.map(group=>'<section class="reference-group"><h3>'+group.title+'</h3>'+group.items.map(([name,description,parts])=>'<details class="reference-property"><summary><code>'+name+'</code><span>'+description+'</span></summary>'+(parts&&parts.length?'<div class="reference-parts">'+parts.map(([label,detail])=>'<details class="reference-part"><summary>'+label+'</summary><p>'+detail+'</p></details>').join('')+'</div>':'')+'</details>').join('')+'</section>').join('')+'<p class="reference-note">Нажми на свойство, чтобы раскрыть его части. Нажми на часть, чтобы увидеть варианты и значения.</p>';
 
   const topics={
     selectors:{title:'Селекторы',tasks:[
