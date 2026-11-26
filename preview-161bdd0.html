@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0e1122">
+  <title>NOCTURNE CSS City</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="./">NOCTURNE <span>CSS CITY</span></a>
+    
+  </header>
+  <main class="app">
+    <nav class="topics" aria-label="Темы CSS">
+      <button class="topic active" data-topic="selectors"><b>01</b><span>Селекторы</span></button>
+      <button class="topic" data-topic="colors"><b>02</b><span>Цвет и фон</span></button>
+      <button class="topic" data-topic="spacing"><b>03</b><span>Размеры и расстояния</span></button>
+      <button class="topic" data-topic="effects"><b>04</b><span>Эффекты</span></button>
+    </nav>
+    <section class="workspace">
+      <section class="scene-panel">
+        <div class="panel-heading"><div><span class="kicker" id="topic-kicker">ТЕМА 01</span><h1 id="topic-title">Селекторы</h1></div></div>
+        <iframe class="city-frame" src="./scenes/city/index.html" title="Городская сцена"></iframe>
+        <div class="class-map">
+          <div class="class-map-head"><strong>Элементы города</strong></div>
+          <div class="class-list">
+            <button class="class-chip" data-selector=".building-left"><code>.building-left</code><span>Левое жилое здание</span></button>
+            <button class="class-chip" data-selector=".building-center"><code>.building-center</code><span>Центральная башня</span></button>
+            <button class="class-chip" data-selector=".building-right"><code>.building-right</code><span>Правое офисное здание</span></button>
+            <button class="class-chip" data-selector=".floor"><code>.floor</code><span>Этаж</span></button>
+            <button class="class-chip" data-selector=".window"><code>.window</code><span>Окно</span></button>
+            <button class="class-chip" data-selector=".roof"><code>.roof</code><span>Крыша</span></button>
+            <button class="class-chip" data-selector=".building-base"><code>.building-base</code><span>Основание</span></button>
+          </div>
+        </div>
+      </section>
+      <aside class="task-panel">
+        <div class="task-top"><span class="kicker">ПРАКТИКА</span><span id="task-count">01 / 01</span></div>
+        <h2 id="task-title">Выбери элемент</h2>
+        <p id="task-prompt">Выбери класс здания в списке и измени его стиль.</p>
+        
+        
+        <textarea id="css-input" spellcheck="false" autocapitalize="off" autocomplete="off" placeholder=".building-left {&#10;  &#10;}"></textarea>
+        <div class="editor-actions">
+          <button id="reset" class="button secondary">Сбросить</button>
+          <button id="skip" class="button secondary">Пропустить</button>
+          <button id="check" class="button primary">Проверить</button>
+        </div>
+        <p id="status" class="status" role="status" aria-live="polite">Изменения сразу видны в городе.</p>
+        <details class="reference"><summary>Справочник CSS</summary><div id="reference-content" class="reference-content"></div></details>
+        <details class="help"><summary>Подсказка</summary><p id="hint"></p></details>
+        <details class="help"><summary>Показать решение</summary><pre id="solution"></pre><button id="insert" class="button secondary">Вставить в редактор</button></details>
+        <div class="task-progress"><span id="progress"></span></div>
+      </aside>
+    </section>
+  </main>
+  <script src="./city-editor.js"></script>
+</body>
+</html>
