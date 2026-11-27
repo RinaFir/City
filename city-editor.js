@@ -466,7 +466,7 @@
       ['Пример','.roof ~ .building-base выбирает основание, расположенное после крыши внутри того же здания.'],
       ['Отличие от +','+ выбирает только ближайшего следующего соседа; ~ — всех подходящих следующих соседей.']
     ]]
-  };
+  ]};
   const topics={
     frame:{title:'Рамки',tasks:[
       {section:'Основы рамки',title:'Добавь сплошную рамку окнам',prompt:'Добавь окнам центральной башни рамку со всех четырёх сторон: толщиной 2px, сплошную, бирюзового цвета.',hint:'Сокращённая запись border задаёт толщину, стиль и цвет сразу для всех четырёх сторон.',reference:[referenceLibrary.frame],solution:'.building-center .window {\n  border: 2px solid #60a4a1;\n}',checks:['top','right','bottom','left'].flatMap(side=>[{selector:'.building-center .window',property:`border-${side}-width`,expected:'2px'},{selector:'.building-center .window',property:`border-${side}-style`,expected:'solid'},{selector:'.building-center .window',property:`border-${side}-color`,expected:'rgb(96, 164, 161)'}])}
