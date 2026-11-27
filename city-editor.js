@@ -658,7 +658,7 @@
       const selector=current().check.selector;
       const hint=selector.includes(':checked')?'Поставь флажок ACCESS в панели города.':
         selector.includes(':valid')?'Введи корректный адрес электронной почты, например operator@example.com.':
-        selector.includes(':invalid')?'Оставь поле EMAIL пустым или введи некорректный адрес.';
+        selector.includes(':invalid')?'Оставь поле EMAIL пустым или введи некорректный адрес.':'Проверь текущее состояние поля.';
       setStatus(hint,'bad');
     }
     else if(current().check?.mode==='selector'||event.data.reason==='selector')setStatus('Проверь запись селектора и то, какие элементы он выбирает.','bad');
