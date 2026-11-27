@@ -164,6 +164,13 @@
       ['.road-mark-b','Вторая дорожная отметка','Правая отметка на дороге.'],
       ['.road-reflection','Отражение на дороге','Размытое световое отражение на поверхности улицы.']
     ]},
+      ['.control-terminal','Панель управления','Интерактивная консоль в передней части улицы.'],
+      ['.terminal-form','Форма управления','Группа полей и кнопок панели.'],
+      ['.terminal-email','Поле email','Обязательное поле с проверкой формата электронной почты.'],
+      ['.terminal-note','Необязательное поле','Текстовое поле, которое можно оставить пустым.'],
+      ['.terminal-access','Переключатель доступа','Флажок checkbox, который можно отметить и снять.'],
+      ['.terminal-connect','Кнопка подключения','Доступная кнопка для проверки фокуса и активного состояния.'],
+      ['.terminal-locked','Заблокированная кнопка','Кнопка с атрибутом disabled.'],
     {title:'Типы HTML-элементов в заданиях',items:[
       ['article','Здание','Каждое основное здание — элемент article. Селектор тега пишется без точки.'],
       ['i','Окно','Каждое окно — элемент i с классом window.'],
@@ -173,7 +180,11 @@
       ['div','Контейнер/слой','Используется для этажей, крыш, фона и других групп сцены.'],
       ['section','Смысловая область','Группирует квартал зданий.'],
       ['main','Основная область сцены','Корневой основной элемент городской сцены.'],
-      ['small','Мелкая подпись','Элемент подписи CSS-класса на фасаде.']
+      ['small','Мелкая подпись','Элемент подписи CSS-класса на фасаде.'],
+      ['form','Форма','Содержит интерактивные поля и кнопки панели.'],
+      ['label','Подпись поля','Связывает текстовую подпись с полем формы.'],
+      ['input','Поле ввода или переключатель','Используется для email, заметки и флажка.'],
+      ['button','Кнопка','Кнопки CONNECT и LOCKED на панели.']
     ]}
   ];
   const renderCityLegend=()=>cityLegend.map(group=>'<details class="legend-group"><summary>'+group.title+' <span>'+group.items.length+'</span></summary><div class="class-list">'+group.items.map(([selector,label,description])=>'<button type="button" class="class-chip" data-selector="'+selector.replace(/&/g,'&amp;').replace(/"/g,'&quot;')+'" title="'+description.replace(/&/g,'&amp;').replace(/"/g,'&quot;')+'"><code>'+selector+'</code><span><strong>'+label+'</strong>'+description+'</span></button>').join('')+'</div></details>').join('')+'<p class="legend-note">Классы с точкой, ID с #, атрибуты в квадратных скобках, теги — без префикса. В одной записи может быть несколько классов: например, .window.lit.teal.</p>';
@@ -388,6 +399,38 @@
       ['Важно','Пустое поле без required обычно не считается ошибочным только из-за отсутствия значения. Для обязательного пустого поля может сработать :invalid.']
     ]]
   ]};
+  const formStateReference={title:'Псевдоклассы состояния и элементы формы',items:[
+    [':focus — элемент в фокусе','Совпадает с элементом, который сейчас принимает клавиатурный ввод или другое направленное взаимодействие. Фокус обычно устанавливается нажатием на поле или переходом клавишей Tab.',[
+      ['Пример','.terminal-email:focus выбирает поле email, пока оно находится в фокусе.'],
+      ['Проверка','Нажми на поле ввода, затем нажми «Проверить» в панели заданий.']
+    ]],
+    [':focus-visible — фокус, который нужно показать','Совпадает с элементом в фокусе, когда браузер считает, что визуальный индикатор фокуса необходим. Чаще всего это происходит при навигации клавиатурой.',[
+      ['Пример','.terminal-connect:focus-visible выбирает кнопку CONNECT при переходе к ней клавишей Tab.'],
+      ['Отличие от :focus','Элемент может быть в фокусе, но не соответствовать :focus-visible, если фокус получен мышью и браузер не считает индикатор необходимым.']
+    ]],
+    [':focus-within — контейнер с фокусом внутри','Совпадает с контейнером, если сам контейнер или любой его потомок находится в фокусе.',[
+      ['Пример','.terminal-form:focus-within выбирает форму, когда курсор находится в одном из её полей или кнопок.']
+    ]],
+    [':active — элемент в момент нажатия','Совпадает с элементом в активный момент взаимодействия: например, пока пользователь нажимает кнопку мышью.',[
+      ['Пример','.terminal-connect:active выбирает кнопку CONNECT во время нажатия.']
+    ]],
+    [':checked — отмеченный переключатель','Совпадает с отмеченным checkbox или выбранным radio. Состояние меняется при взаимодействии пользователя или программном изменении checked.',[
+      ['Пример','.terminal-access:checked выбирает флажок ACCESS только после установки отметки.']
+    ]],
+    [':disabled и :enabled — доступность управления','Выбирают соответственно отключённые и доступные для взаимодействия элементы управления формы.',[
+      ['Примеры','.terminal-locked:disabled выбирает заблокированную кнопку; .terminal-connect:enabled — доступную кнопку.']
+    ]],
+    [':required и :optional — обязательность поля','Выбирают элементы формы с атрибутом required и без него. Это состояние задаётся HTML-разметкой.',[
+      ['Примеры','.terminal-email:required — обязательное поле; .terminal-note:optional — необязательное поле.']
+    ]],
+    [':valid и :invalid — корректность значения','Проверяют текущее значение поля по встроенным правилам HTML-валидации: типу поля, обязательности и другим ограничениям.',[
+      ['Примеры','.terminal-email:invalid совпадает с пустым обязательным email-полем или неверным адресом; .terminal-email:valid — с корректным адресом.'],
+      ['Проверка','Введи корректный адрес электронной почты, чтобы переключить поле из invalid в valid.']
+    ]],
+    ['::placeholder — текст-подсказка поля','Псевдоэлемент обращается к отображаемому тексту placeholder внутри поля ввода. Это не само поле и не введённое значение.',[
+      ['Пример','.terminal-email::placeholder выбирает текст-подсказку в поле email.']
+    ]]
+  };
   const pseudoElementReference={title:'Псевдоэлементы: части и созданные области элемента',items:[
     ['Псевдоэлемент — отдельная часть отображения','Псевдоэлемент обращается не ко всему HTML-элементу, а к определённой части его отображения или к дополнительной области, которую браузер создаёт средствами CSS. В HTML-коде отдельного узла для такого объекта нет. В современной записи используется двойное двоеточие ::.',[
       ['Из чего состоит селектор','.building-sign b::before: сначала .building-sign b выбирает настоящий HTML-элемент b, затем ::before обращается к созданной для него области.'],
@@ -509,6 +552,18 @@
       {section:'Сочетания псевдоклассов',title:'Найди здание по двум условиям',prompt:'Выбери здание, в котором есть бирюзовое окно, но нет ни одного розового окна.',hint:'Оба условия относятся к зданию: :has() проверяет наличие бирюзового окна, :not(:has()) — отсутствие розовых.',reference:[pseudoClassReference],solution:'.building:has(.window.teal):not(:has(.window.pink)) {\n  \n}',check:{mode:'selector',selector:'.building:has(.window.teal):not(:has(.window.pink))',mustContain:[":has",":not",".teal",".pink"]}},
       {section:'Сочетания псевдоклассов',title:'Собери составное позиционное условие',prompt:'Выбери несветящиеся окна на нечётных этажах центральной башни. На каждом таком этаже нужны окна на чётных позициях.',hint:'Соедини :nth-child(odd) у этажа, :nth-of-type(even) у окна и :not(.lit).',reference:[pseudoClassReference],solution:'.building-center .floor:nth-child(odd) > .window:nth-of-type(even):not(.lit) {\n  \n}',check:{mode:'selector',selector:'.building-center .floor:nth-child(odd) > .window:nth-of-type(even):not(.lit)',mustContain:[":nth-child",":nth-of-type",">",":not",".lit"]}},
       {section:'Сочетания псевдоклассов',title:'Добавь условие наведения',prompt:'Выбери окна центральной башни только в момент наведения указателя. Светящиеся окна исключи.',hint:'Псевдокласс :hover добавь к окну, а :not(.lit) оставь вторым условием.',reference:[pseudoClassReference],solution:'.building-center .window:hover:not(.lit) {\n  \n}',check:{mode:'selector',selector:'.building-center .window:hover:not(.lit)',mustContain:[":hover",":not",".lit"]}},
+      {section:'Состояния формы и взаимодействия',title:'Выбери поле в фокусе',prompt:'Выбери поле EMAIL, когда оно находится в фокусе. Нажми на поле в панели города, затем проверь селектор.',hint:':focus выбирает элемент, который сейчас находится в фокусе. Нужен класс .terminal-email.',reference:[formStateReference],solution:'.terminal-email:focus {\n  \n}',check:{mode:'selector',selector:'.terminal-email:focus',mustContain:['.terminal-email',':focus']}},
+      {section:'Состояния формы и взаимодействия',title:'Выбери клавиатурный фокус кнопки',prompt:'Перейди клавишей Tab к кнопке CONNECT в панели города. Выбери её в состоянии видимого клавиатурного фокуса.',hint:':focus-visible обычно появляется при навигации клавиатурой. Используй Tab, а не щелчок мышью.',reference:[formStateReference],solution:'.terminal-connect:focus-visible {\n  \n}',check:{mode:'selector',selector:'.terminal-connect:focus-visible',mustContain:['.terminal-connect',':focus-visible']}},
+      {section:'Состояния формы и взаимодействия',title:'Выбери форму с активным полем',prompt:'Установи фокус на любое поле панели города и выбери саму форму, внутри которой находится фокус.',hint:':focus-within выбирает контейнер, если фокус находится на нём или на любом его потомке.',reference:[formStateReference],solution:'.terminal-form:focus-within {\n  \n}',check:{mode:'selector',selector:'.terminal-form:focus-within',mustContain:['.terminal-form',':focus-within']}},
+      {section:'Состояния формы и взаимодействия',title:'Выбери кнопку в момент нажатия',prompt:'Нажми кнопку CONNECT в панели города, затем проверь селектор активной кнопки.',hint:':active соответствует моменту нажатия. Проверка запоминает факт нажатия, чтобы ты мог отпустить кнопку и нажать «Проверить».',reference:[formStateReference],solution:'.terminal-connect:active {\n  \n}',check:{mode:'selector',selector:'.terminal-connect:active',mustContain:['.terminal-connect',':active']}},
+      {section:'Состояния формы и взаимодействия',title:'Выбери отмеченный переключатель',prompt:'Поставь флажок ACCESS в панели города и выбери его только в отмеченном состоянии.',hint:':checked выбирает checkbox или radio, у которого установлена отметка.',reference:[formStateReference],solution:'.terminal-access:checked {\n  \n}',check:{mode:'selector',selector:'.terminal-access:checked',mustContain:['.terminal-access',':checked']}},
+      {section:'Состояния формы и взаимодействия',title:'Выбери отключённую кнопку',prompt:'Выбери кнопку LOCKED. Она отключена в HTML и не реагирует на нажатие.',hint:':disabled выбирает элемент управления с атрибутом disabled.',reference:[formStateReference],solution:'.terminal-locked:disabled {\n  \n}',check:{mode:'selector',selector:'.terminal-locked:disabled',mustContain:['.terminal-locked',':disabled']}},
+      {section:'Состояния формы и взаимодействия',title:'Выбери доступную кнопку',prompt:'Выбери кнопку CONNECT, которая доступна для взаимодействия.',hint:':enabled выбирает элементы управления, которые не отключены атрибутом disabled.',reference:[formStateReference],solution:'.terminal-connect:enabled {\n  \n}',check:{mode:'selector',selector:'.terminal-connect:enabled',mustContain:['.terminal-connect',':enabled']}},
+      {section:'Состояния формы и взаимодействия',title:'Выбери обязательное поле',prompt:'Выбери поле EMAIL. В разметке оно отмечено как обязательное для заполнения.',hint:':required выбирает элементы формы с атрибутом required.',reference:[formStateReference],solution:'.terminal-email:required {\n  \n}',check:{mode:'selector',selector:'.terminal-email:required',mustContain:['.terminal-email',':required']}},
+      {section:'Состояния формы и взаимодействия',title:'Выбери необязательное поле',prompt:'Выбери поле NOTE. Его можно оставить пустым — атрибута required у него нет.',hint:':optional выбирает элементы формы, для которых поле не объявлено обязательным.',reference:[formStateReference],solution:'.terminal-note:optional {\n  \n}',check:{mode:'selector',selector:'.terminal-note:optional',mustContain:['.terminal-note',':optional']}},
+      {section:'Состояния формы и взаимодействия',title:'Выбери некорректный email',prompt:'Оставь поле EMAIL пустым или введи некорректный адрес. Выбери поле в состоянии ошибки проверки.',hint:':invalid совпадает с полем, значение которого не проходит встроенную HTML-проверку. Поле обязательное, поэтому пустое значение тоже некорректно.',reference:[formStateReference],solution:'.terminal-email:invalid {\n  \n}',check:{mode:'selector',selector:'.terminal-email:invalid',mustContain:['.terminal-email',':invalid']}},
+      {section:'Состояния формы и взаимодействия',title:'Выбери корректный email',prompt:'Введи в поле EMAIL корректный адрес, например operator@example.com. Выбери поле после успешной проверки значения.',hint:':valid совпадает с полем, которое проходит встроенную HTML-проверку. После ввода корректного email состояние изменится.',reference:[formStateReference],solution:'.terminal-email:valid {\n  \n}',check:{mode:'selector',selector:'.terminal-email:valid',mustContain:['.terminal-email',':valid']}},
+      {section:'Состояния формы и взаимодействия',title:'Выбери текст-подсказку поля',prompt:'Выбери placeholder внутри поля EMAIL. Это текст-подсказка, который виден, пока поле пустое.',hint:'::placeholder — псевдоэлемент текста-подсказки. В конце селектора используй два двоеточия.',reference:[formStateReference],solution:'.terminal-email::placeholder {\n  \n}',check:{mode:'selector',selector:'.terminal-email::placeholder',mustContain:['.terminal-email','::placeholder']}},
       {section:'Псевдоэлементы',title:'Выбери маркер перед названием',prompt:'Выбери созданный декоративный маркер перед названием каждого здания.',hint:'::before обращается к генерируемому содержимому перед текстом. В сцене для него уже задан content, поэтому маркер существует.',reference:[pseudoElementReference],solution:'.building-sign b::before {\n  \n}',check:{mode:'selector',selector:'.building-sign b::before'}},
       {section:'Псевдоэлементы',title:'Выбери маркер после названия центральной башни',prompt:'Выбери декоративный маркер после названия только центральной башни.',hint:'::after обращается к генерируемому содержимому после текста. В сцене маркер создан через content.',reference:[pseudoElementReference],solution:'.building-center .building-sign b::after {\n  \n}',check:{mode:'selector',selector:'.building-center .building-sign b::after'}},
       {section:'Псевдоэлементы',title:'Выбери первую букву названия',prompt:'Выбери первую букву названия каждого здания.',hint:'Псевдоэлемент первой буквы — ::first-letter.',reference:[pseudoElementReference],solution:'.building-sign b::first-letter {\n  \n}',check:{mode:'selector',selector:'.building-sign b::first-letter'}},
@@ -524,7 +579,7 @@
       {title:'Сделай окна полупрозрачными',prompt:'Установи opacity окон центральной башни на 0.55 — это 55% непрозрачности.',hint:'Выбери окна центрального здания и задай opacity. Значение 0 означает полную прозрачность, 1 — полную непрозрачность.',reference:[referenceLibrary.effects],solution:'.building-center .window {\n  opacity: 0.55;\n}',check:{selector:'.building-center .window',property:'opacity',expected:'0.55'}}]}
   };
   const selectorTasks=topics.selectors.tasks;
-  const pseudoClassTasks=selectorTasks.filter(task=>task.section==='Сочетания псевдоклассов'||task.section==='Позиционные псевдоклассы');
+  const pseudoClassTasks=selectorTasks.filter(task=>task.section==='Сочетания псевдоклассов'||task.section==='Позиционные псевдоклассы'||task.section==='Состояния формы и взаимодействия');
   const pseudoElementTasks=selectorTasks.filter(task=>task.section==='Псевдоэлементы'||task.section==='Сочетание псевдокласса и псевдоэлемента');
   topics.selectors.tasks=selectorTasks.filter(task=>!pseudoClassTasks.includes(task)&&!pseudoElementTasks.includes(task));
   delete topics.colors;delete topics.spacing;delete topics.effects;
