@@ -49,16 +49,16 @@
       const propertyAliases = {
         'border-top-width': ['border-top-width', 'border-top', 'border-width', 'border'],
         'border-top-style': ['border-top-style', 'border-top', 'border-style', 'border'],
-        'border-top-color': ['border-top-color', 'border-top', 'border-color', 'border']
+        'border-top-color': ['border-top-color', 'border-top', 'border-color', 'border'],
         'border-right-width': ['border-right-width', 'border-right', 'border-width', 'border'],
         'border-right-style': ['border-right-style', 'border-right', 'border-style', 'border'],
-        'border-right-color': ['border-right-color', 'border-right', 'border-color', 'border']
+        'border-right-color': ['border-right-color', 'border-right', 'border-color', 'border'],
         'border-bottom-width': ['border-bottom-width', 'border-bottom', 'border-width', 'border'],
         'border-bottom-style': ['border-bottom-style', 'border-bottom', 'border-style', 'border'],
-        'border-bottom-color': ['border-bottom-color', 'border-bottom', 'border-color', 'border']
+        'border-bottom-color': ['border-bottom-color', 'border-bottom', 'border-color', 'border'],
         'border-left-width': ['border-left-width', 'border-left', 'border-width', 'border'],
         'border-left-style': ['border-left-style', 'border-left', 'border-style', 'border'],
-        'border-left-color': ['border-left-color', 'border-left', 'border-color', 'border']
+        'border-left-color': ['border-left-color', 'border-left', 'border-color', 'border'],
         'outline-width': ['outline-width', 'outline'],
         'outline-style': ['outline-style', 'outline'],
         'outline-color': ['outline-color', 'outline'],
@@ -160,22 +160,22 @@
         let result = {passed: false, found: false};
         try {
           if (data.check.mode === 'selector') {
-            const pseudoPattern = /::(before|after|first-letter|first-line|selection|placeholder)\\b/g;
+            const pseudoPattern = /::(before|after|first-letter|first-line|selection|placeholder)\b/g;
             const pseudoOf = selector => selector.match(pseudoPattern)?.join('') || '';
             const hostOf = selector => selector.replace(pseudoPattern, '').trim();
             const expectedSelector = data.check.selector;
             const expectedPseudo = pseudoOf(expectedSelector);
-            const expectedHasHover = /:hover\\b/.test(expectedSelector);
+            const expectedHasHover = /:hover\b/.test(expectedSelector);
             const expectedHost = hostOf(expectedSelector);
-            const expectedBase = expectedHost.replace(/:hover\\b/g, '');
+            const expectedBase = expectedHost.replace(/:hover\b/g, '');
             const expectedNodes = Array.from(document.querySelectorAll(expectedBase));
             const sameNodeSet = (left, right) => left.length === right.length && left.every(node => right.includes(node));
             const rules = collectStyleRules(playerStyle?.sheet?.cssRules || []);
             const submitted = rules.some(rule => {
               if (rule.style.length !== 0 || pseudoOf(rule.selectorText) !== expectedPseudo) return false;
-              const submittedHasHover = /:hover\\b/.test(rule.selectorText);
+              const submittedHasHover = /:hover\b/.test(rule.selectorText);
               if (submittedHasHover !== expectedHasHover) return false;
-              const submittedHost = hostOf(rule.selectorText).replace(/:hover\\b/g, '');
+              const submittedHost = hostOf(rule.selectorText).replace(/:hover\b/g, '');
               let submittedNodes;
               try { submittedNodes = Array.from(document.querySelectorAll(submittedHost)); }
               catch (error) { return false; }
