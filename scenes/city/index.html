@@ -106,20 +106,21 @@
       }
 
       function checkPropertyRequirements(checks) {
-        let found = true;
-        const passed = checks.every(item => {
+        for (const item of checks) {
           const targets = Array.from(document.querySelectorAll(item.selector));
-          if (!targets.length) {
-            found = false;
-            return false;
-          }
+          if (!targets.length) return {found: false, passed: false, reason: 'target'};
+
           const applied = getAppliedElements(item.property);
-          if (!sameElements(applied, targets)) return false;
-          return targets.every(target =>
+          if (!sameElements(applied, targets)) {
+            return {found: true, passed: false, reason: 'scope'};
+          }
+
+          const valuesMatch = targets.every(target =>
             getComputedStyle(target).getPropertyValue(item.property).trim() === item.expected
           );
-        });
-        return {found, passed: found && passed};
+          if (!valuesMatch) return {found: true, passed: false, reason: 'value'};
+        }
+        return {found: true, passed: true, reason: ''};
       }
 
       window.addEventListener('message', event => {
@@ -149,7 +150,7 @@
               .replace(/::(before|after|first-letter|first-line|selection|placeholder)\\b/g, '')
               .replace(/:(hover|active|focus-visible|focus-within|focus|checked|disabled|enabled|required|optional|valid|invalid)\\b/g, '');
             const found = !!hostSelector && document.querySelectorAll(hostSelector).length > 0;
-            result = {found, passed: submitted && found};
+            result = {found, passed: submitted && found, reason: submitted ? '' : 'selector'};
           } else {
             const checks = Array.isArray(data.check.checks) ? data.check.checks : [data.check];
             result = checkPropertyRequirements(checks);
@@ -159,7 +160,7 @@
         }
 
         window.parent.postMessage(
-          {type: 'NOCTURNE_TASK_RESULT', id: data.id, passed: result.passed, found: result.found},
+          {type: 'NOCTURNE_TASK_RESULT', id: data.id, passed: result.passed, found: result.found, reason: result.reason},
           event.origin === 'null' ? '*' : event.origin
         );
       });
