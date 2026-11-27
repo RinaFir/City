@@ -171,6 +171,7 @@
             const expectedNodes = Array.from(document.querySelectorAll(expectedBase));
             const sameNodeSet = (left, right) => left.length === right.length && left.every(node => right.includes(node));
             const rules = collectStyleRules(playerStyle?.sheet?.cssRules || []);
+            let interactionMissing = false;
             const submitted = rules.some(rule => {
               if (rule.style.length !== 0 || pseudoOf(rule.selectorText) !== expectedPseudo) return false;
               const submittedHasHover = /:hover\b/.test(rule.selectorText);
@@ -180,14 +181,14 @@
               try { submittedNodes = Array.from(document.querySelectorAll(submittedHost)); }
               catch (error) { return false; }
               if (!sameNodeSet(submittedNodes, expectedNodes)) return false;
-              if (expectedHasHover && (!lastHoveredElement || !lastHoveredElement.matches(expectedBase))) return false;
-              if (expectedPseudo.includes('::selection') && !window.getSelection()?.toString()) return false;
+              if (expectedHasHover && (!lastHoveredElement || !lastHoveredElement.matches(expectedBase))) { interactionMissing = true; return false; }
+              if (expectedPseudo.includes('::selection') && !window.getSelection()?.toString()) { interactionMissing = true; return false; }
               const requiredTokens = Array.isArray(data.check.mustContain) ? data.check.mustContain : data.check.mustContain ? [data.check.mustContain] : [];
               if (!requiredTokens.every(token => rule.selectorText.includes(token))) return false;
               return true;
             });
             const found = expectedNodes.length > 0;
-            result = {found, passed: submitted && found, reason: submitted && found ? '' : 'selector'};
+            result = {found, passed: submitted && found, reason: submitted && found ? '' : interactionMissing ? 'interaction' : 'selector'};
           } else {
             const checks = Array.isArray(data.check.checks) ? data.check.checks : [data.check];
             result = checkPropertyRequirements(checks);
