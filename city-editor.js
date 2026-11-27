@@ -458,7 +458,7 @@
     ]},
     selectors:{title:'Селекторы',tasks:[
       {section:'Простые селекторы',title:'Выбери все элементы универсальным селектором',prompt:'Выбери все элементы внутри города. Универсальный селектор обозначает любой HTML-элемент.',hint:'Для выбора любого элемента используется звёздочка *.',reference:[basicSelectorReference],solution:'* {\n  \n}',check:{mode:'selector',selector:'*'}},
-      {section:'Простые селекторы',title:'Выбери элементы по тегу',prompt:'Выбери все элементы-здания города. В редакторе должна быть только запись селектора и пустой блок правила.',hint:'Здания в сцене — элементы article. Селектор тега записывается без точки.',reference:[basicSelectorReference],solution:'article {\n  \n}',check:{mode:'selector',selector:'article'}},
+      {section:'Простые селекторы',title:'Выбери все здания по классу',prompt:'Выбери все элементы-здания города. В редакторе должна быть только запись селектора и пустой блок правила.',hint:'У каждого здания есть класс building. Класс выбирают точкой перед именем.',reference:[basicSelectorReference],solution:'.building {\n  \n}',check:{mode:'selector',selector:'.building'}},
       {section:'Простые селекторы',title:'Выбери левое здание по классу',prompt:'Выбери только левое жилое здание. Остальные здания и элементы не должны попасть в выборку.',hint:'У левого здания есть класс building-left. Класс выбирают точкой перед именем.',reference:[basicSelectorReference],solution:'.building-left {\n  \n}',check:{mode:'selector',selector:'.building-left'}},
       {section:'Простые селекторы',title:'Выбери все окна',prompt:'Выбери все окна во всех трёх зданиях. Не выбирай этажи, крыши или сами здания.',hint:'У каждого окна есть класс window.',reference:[basicSelectorReference],solution:'.window {\n  \n}',check:{mode:'selector',selector:'.window'}},
       {section:'Простые селекторы',title:'Выбери центральную башню по идентификатору',prompt:'Выбери только центральную башню по её идентификатору.',hint:'Идентификатор выбирают через #. У центральной башни id="central-tower".',reference:[basicSelectorReference],solution:'#central-tower {\n  \n}',check:{mode:'selector',selector:'#central-tower'}},
@@ -556,7 +556,7 @@
     pending=null;
     if(event.data.passed){done=true;$('check').disabled=true;setStatus('Верно. Задание выполнено.','good');}
     else if(event.data.reason==='scope')setStatus('Правило затрагивает лишние элементы. Ограничь селектор объектами из условия.','bad');
-    else if(event.data.reason==='selector')setStatus('Проверь запись селектора и то, какие элементы он выбирает.','bad');
+    else if(current().check?.mode==='selector'||event.data.reason==='selector')setStatus('Проверь запись селектора и то, какие элементы он выбирает.','bad');
     else if(!event.data.found)setStatus('Целевые элементы не найдены. Проверь селектор.','bad');
     else setStatus('Элементы выбраны верно, но значение свойства не совпадает с условием.','bad');
   });
