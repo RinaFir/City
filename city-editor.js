@@ -514,7 +514,7 @@
   $('city-legend').addEventListener('click',event=>{
     const button=event.target.closest('[data-selector]');
     if(!button)return;
-    input.value=button.dataset.selector+' {\\n  \\n}';
+    input.value=button.dataset.selector+' {\n  \n}';
     input.focus();apply();setStatus('Селектор добавлен. Измени нужные свойства.');
   });
   function render(){
