@@ -555,7 +555,10 @@
     if(event.source!==frame.contentWindow||!event.data||event.data.type!=='NOCTURNE_TASK_RESULT'||event.data.id!==pending)return;
     pending=null;
     if(event.data.passed){done=true;$('check').disabled=true;setStatus('Верно. Задание выполнено.','good');}
-    else setStatus(event.data.found?'Пока не выполнено. Сверь значение свойства с условием.':'Элемент не найден. Проверь селектор.','bad');
+    else if(event.data.reason==='scope')setStatus('Правило затрагивает лишние элементы. Ограничь селектор объектами из условия.','bad');
+    else if(event.data.reason==='selector')setStatus('Проверь запись селектора и то, какие элементы он выбирает.','bad');
+    else if(!event.data.found)setStatus('Целевые элементы не найдены. Проверь селектор.','bad');
+    else setStatus('Элементы выбраны верно, но значение свойства не совпадает с условием.','bad');
   });
   render();
 })();
