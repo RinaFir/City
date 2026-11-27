@@ -63,3 +63,24 @@ body{overflow:hidden}
 .building-center .building-sign b::after{content:"";position:absolute;right:-6px;bottom:2px;width:4px;height:4px;background:#e77ca5}
 .selector-label{display:block;flex-basis:100%;font:7px/1 var(--mono,monospace);letter-spacing:.2px;color:#8fd0c5;text-align:right}
 @media(max-width:600px){.building-sign{height:37px;padding:3px 3px}.building-sign b{font-size:5px}.selector-label{font-size:6px}}
+
+
+/* Interactive terminal: real controls for state and form selector exercises */
+.control-terminal{position:absolute;z-index:8;right:10px;bottom:7px;width:clamp(188px,25vw,238px);padding:6px 7px 7px;background:#0b1424ed;border:1px solid #71869b;box-shadow:0 4px 14px #050b16aa;color:#c5d2e2;font:7px/1.2 monospace;letter-spacing:.7px;pointer-events:auto}
+.terminal-heading{display:flex;justify-content:space-between;gap:6px;padding-bottom:4px;margin-bottom:4px;border-bottom:1px solid #52647a;color:#9eb0c4;font-size:7px}
+.terminal-heading span:last-child{color:#69c1b4}
+.terminal-form{display:grid;gap:3px}
+.terminal-field{display:grid;grid-template-columns:37px minmax(0,1fr);align-items:center;gap:5px;color:#91a5bd;font-size:6px}
+.terminal-field input{width:100%;min-width:0;height:17px;padding:2px 4px;border:1px solid #53677f;border-radius:0;background:#111e32;color:#e5edf6;font:7px monospace;letter-spacing:0}
+.terminal-field input::placeholder{color:#74869d;opacity:1}
+.terminal-controls{display:flex;align-items:center;gap:4px;margin-top:1px}
+.terminal-toggle{display:flex;align-items:center;gap:3px;margin-right:auto;color:#9eb0c4;font-size:6px;white-space:nowrap}
+.terminal-access{width:11px;height:11px;margin:0;accent-color:#69c1b4}
+.terminal-controls button{min-height:17px;padding:2px 5px;border:1px solid #71869b;border-radius:0;background:#1a2a40;color:#d9e4f1;font:6px monospace;letter-spacing:.4px;cursor:pointer}
+.terminal-connect{border-color:#69a99f!important;color:#9de0d4!important}
+.terminal-locked:disabled{border-color:#465366;color:#65758a;background:#111a29;cursor:not-allowed}
+.terminal-connect:active{transform:translateY(1px);background:#304b60}
+.terminal-field input:focus,.terminal-controls button:focus{outline:1px solid #e2b77d;outline-offset:1px}
+.terminal-controls button:focus-visible,.terminal-access:focus-visible{outline:2px solid #e2b77d;outline-offset:2px}
+.terminal-form:focus-within{border-left:2px solid #69c1b4;padding-left:4px}
+@media(max-width:600px){.control-terminal{right:6px;bottom:5px;width:188px;padding:5px 6px}.terminal-heading{font-size:6px}.terminal-field{grid-template-columns:32px minmax(0,1fr);gap:4px}.terminal-field input{height:16px;font-size:6px}.terminal-controls{gap:3px}.terminal-controls button{padding:2px 4px;font-size:5px}}
