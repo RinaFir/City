@@ -93,9 +93,11 @@
         lastFocusVisibleElement = event.target.matches?.(':focus-visible') ? event.target : null;
         refreshSelectorPreview();
       });
-      document.addEventListener('keydown', () => {
+      document.addEventListener('keydown', event => {
         const active = document.activeElement;
         if (active?.matches?.(':focus-visible')) lastFocusVisibleElement = active;
+        const activeButton = event.target.closest?.('.terminal-connect');
+        if (activeButton && (event.key === 'Enter' || event.key === ' ')) lastActiveElement = activeButton;
       }, true);
       document.addEventListener('pointerdown', event => {
         const activeButton = event.target.closest?.('.terminal-connect');
