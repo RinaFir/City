@@ -644,7 +644,23 @@
     pending=null;
     if(event.data.passed){done=true;$('check').disabled=true;setStatus('Верно. Задание выполнено.','good');}
     else if(event.data.reason==='scope')setStatus('Правило затрагивает лишние элементы. Ограничь селектор объектами из условия.','bad');
-    else if(event.data.reason==='interaction')setStatus(current().check.selector.includes('::selection')?'Выдели фрагмент названия в городе, затем нажми «Проверить».':'Наведи указатель на подходящее окно в городе, затем нажми «Проверить».','bad');
+    else if(event.data.reason==='interaction'){
+      const selector=current().check.selector;
+      const hint=selector.includes('::selection')?'Выдели фрагмент названия в городе, затем нажми «Проверить».':
+        selector.includes(':hover')?'Наведи указатель на подходящее окно в городе, затем нажми «Проверить».':
+        selector.includes(':focus-visible')?'Перейди клавишей Tab к кнопке CONNECT, затем нажми «Проверить».':
+        selector.includes(':focus-within')?'Установи фокус на поле или кнопку внутри формы, затем нажми «Проверить».':
+        selector.includes(':active')?'Нажми кнопку CONNECT, отпусти её и затем нажми «Проверить».':
+        'Установи фокус на поле EMAIL, затем нажми «Проверить».';
+      setStatus(hint,'bad');
+    }
+    else if(event.data.reason==='state'){
+      const selector=current().check.selector;
+      const hint=selector.includes(':checked')?'Поставь флажок ACCESS в панели города.':
+        selector.includes(':valid')?'Введи корректный адрес электронной почты, например operator@example.com.':
+        selector.includes(':invalid')?'Оставь поле EMAIL пустым или введи некорректный адрес.';
+      setStatus(hint,'bad');
+    }
     else if(current().check?.mode==='selector'||event.data.reason==='selector')setStatus('Проверь запись селектора и то, какие элементы он выбирает.','bad');
     else if(!event.data.found)setStatus('Целевые элементы не найдены. Проверь селектор.','bad');
     else setStatus('Элементы выбраны верно, но значение свойства не совпадает с условием.','bad');
