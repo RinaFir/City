@@ -28,18 +28,13 @@
       <section class="scene-panel">
         <div class="panel-heading"><div><span class="kicker" id="topic-kicker">ТЕМА 01</span><h1 id="topic-title">Селекторы</h1></div></div>
         <iframe class="city-frame" src="./scenes/city/index.html" title="Городская сцена"></iframe>
-        <div class="class-map">
-          <div class="class-map-head"><strong>Элементы города</strong></div>
-          <div class="class-list">
-            <button class="class-chip" data-selector=".building-left"><code>.building-left</code><span>Левое жилое здание</span></button>
-            <button class="class-chip" data-selector=".building-center"><code>.building-center</code><span>Центральная башня</span></button>
-            <button class="class-chip" data-selector=".building-right"><code>.building-right</code><span>Правое офисное здание</span></button>
-            <button class="class-chip" data-selector=".floor"><code>.floor</code><span>Этаж</span></button>
-            <button class="class-chip" data-selector=".window"><code>.window</code><span>Окно</span></button>
-            <button class="class-chip" data-selector=".roof"><code>.roof</code><span>Крыша</span></button>
-            <button class="class-chip" data-selector=".building-base"><code>.building-base</code><span>Основание</span></button>
+        <section class="class-map" aria-labelledby="city-legend-title">
+          <div class="class-map-head">
+            <strong id="city-legend-title">Легенда города</strong>
+            <span>Все обозначения сцены и заданий. Нажми на запись, чтобы вставить селектор в редактор.</span>
           </div>
-        </div>
+          <div id="city-legend" class="city-legend" aria-live="polite"></div>
+        </section>
       </section>
       <aside class="task-panel">
         <div class="task-top"><span class="kicker">ПРАКТИКА</span><span id="task-count">01 / 13</span></div>
