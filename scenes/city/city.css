@@ -58,8 +58,8 @@ body{overflow:hidden}
 /* Visible selectors on each building */
 .building-sign{height:36px;position:relative;flex-wrap:wrap;column-gap:5px;padding:3px 7px}
 .building-sign b{font-size:7px}
-.building-center .building-sign b{max-width:26px;white-space:normal;line-height:1.15}
-.building-sign b::before{content:"";display:inline-block;width:4px;height:4px;margin-right:4px;background:#8fd0c5;vertical-align:middle}
-.building-center .building-sign b::after{content:"";display:inline-block;width:4px;height:4px;margin-left:4px;background:#e77ca5;vertical-align:middle}
+.building-center .building-sign b{position:relative;font-size:6px;max-width:28px;white-space:normal;line-height:1.15}
+.building-sign b::before{content:"";position:absolute;left:-6px;top:2px;width:4px;height:4px;background:#8fd0c5}
+.building-center .building-sign b::after{content:"";position:absolute;right:-6px;bottom:2px;width:4px;height:4px;background:#e77ca5}
 .selector-label{display:block;flex-basis:100%;font:7px/1 var(--mono,monospace);letter-spacing:.2px;color:#8fd0c5;text-align:right}
 @media(max-width:600px){.building-sign{height:37px;padding:3px 3px}.building-sign b{font-size:5px}.selector-label{font-size:6px}}
