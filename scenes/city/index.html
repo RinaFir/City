@@ -102,6 +102,8 @@
         if (activeButton) lastActiveElement = activeButton;
       }, true);
       document.getElementById('terminal-form')?.addEventListener('submit', event => event.preventDefault());
+      document.addEventListener('input', refreshSelectorPreview);
+      document.addEventListener('change', refreshSelectorPreview);
       document.addEventListener('pointerover', event => {
         const windowElement = event.target.closest?.('.window');
         if (windowElement) lastHoveredElement = windowElement;
