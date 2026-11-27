@@ -161,7 +161,7 @@
         try {
           if (data.check.mode === 'selector') {
             const pseudoPattern = /::(before|after|first-letter|first-line|selection|placeholder)\b/g;
-            const pseudoOf = selector => selector.match(pseudoPattern)?.join('') || '';
+            const pseudoOf = selector => Array.from(new Set(selector.match(pseudoPattern) || [])).join('');
             const hostOf = selector => selector.replace(pseudoPattern, '').trim();
             const expectedSelector = data.check.selector;
             const expectedPseudo = pseudoOf(expectedSelector);
@@ -182,7 +182,8 @@
               if (!sameNodeSet(submittedNodes, expectedNodes)) return false;
               if (expectedHasHover && (!lastHoveredElement || !lastHoveredElement.matches(expectedBase))) return false;
               if (expectedPseudo.includes('::selection') && !window.getSelection()?.toString()) return false;
-              if (data.check.mustContain && !rule.selectorText.includes(data.check.mustContain)) return false;
+              const requiredTokens = Array.isArray(data.check.mustContain) ? data.check.mustContain : data.check.mustContain ? [data.check.mustContain] : [];
+              if (!requiredTokens.every(token => rule.selectorText.includes(token))) return false;
               return true;
             });
             const found = expectedNodes.length > 0;
