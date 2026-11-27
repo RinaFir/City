@@ -37,6 +37,22 @@
     </section>
     <div class="elevated-line" aria-hidden="true"><span></span><span></span></div>
     <div class="foreground" aria-hidden="true"><div class="street"></div><div class="street-light light-left"><i></i></div><div class="street-light light-right"><i></i></div><div class="road-mark road-mark-a"></div><div class="road-mark road-mark-b"></div><div class="road-reflection"></div></div>
+    <aside class="control-terminal" aria-label="Интерактивная панель управления для упражнений по псевдоклассам">
+      <div class="terminal-heading"><span>FIELD TERMINAL</span><span>NODE 04 / ONLINE</span></div>
+      <form class="terminal-form" id="terminal-form" novalidate>
+        <label class="terminal-field">EMAIL
+          <input class="terminal-email" type="email" name="email" required placeholder="operator@nocturne.city" autocomplete="off">
+        </label>
+        <label class="terminal-field">NOTE
+          <input class="terminal-note" type="text" name="note" placeholder="optional field">
+        </label>
+        <div class="terminal-controls">
+          <label class="terminal-toggle"><input class="terminal-access" type="checkbox" name="access"> ACCESS</label>
+          <button class="terminal-connect" type="button">CONNECT</button>
+          <button class="terminal-locked" type="button" disabled>LOCKED</button>
+        </div>
+      </form>
+    </aside>
     
   </main>
   <script>
@@ -68,6 +84,24 @@
       };
 
       let lastHoveredElement = null;
+      let lastFocusedElement = null;
+      let lastFocusVisibleElement = null;
+      let lastActiveElement = null;
+
+      document.addEventListener('focusin', event => {
+        lastFocusedElement = event.target;
+        lastFocusVisibleElement = event.target.matches?.(':focus-visible') ? event.target : null;
+        refreshSelectorPreview();
+      });
+      document.addEventListener('keydown', () => {
+        const active = document.activeElement;
+        if (active?.matches?.(':focus-visible')) lastFocusVisibleElement = active;
+      }, true);
+      document.addEventListener('pointerdown', event => {
+        const activeButton = event.target.closest?.('.terminal-connect');
+        if (activeButton) lastActiveElement = activeButton;
+      }, true);
+      document.getElementById('terminal-form')?.addEventListener('submit', event => event.preventDefault());
       document.addEventListener('pointerover', event => {
         const windowElement = event.target.closest?.('.window');
         if (windowElement) lastHoveredElement = windowElement;
@@ -165,30 +199,44 @@
             const hostOf = selector => selector.replace(pseudoPattern, '').trim();
             const expectedSelector = data.check.selector;
             const expectedPseudo = pseudoOf(expectedSelector);
-            const expectedHasHover = /:hover\b/.test(expectedSelector);
+            const statePattern = /:(focus-visible|focus-within|focus|active|checked|disabled|enabled|required|optional|valid|invalid|hover)\\b/g;
+            const stateOf = selector => Array.from(new Set(selector.match(statePattern) || []));
+            const expectedStates = stateOf(expectedSelector);
+            const stripStates = selector => selector.replace(statePattern, '');
             const expectedHost = hostOf(expectedSelector);
-            const expectedBase = expectedHost.replace(/:hover\b/g, '');
+            const expectedBase = stripStates(expectedHost);
             const expectedNodes = Array.from(document.querySelectorAll(expectedBase));
             const sameNodeSet = (left, right) => left.length === right.length && left.every(node => right.includes(node));
             const rules = collectStyleRules(playerStyle?.sheet?.cssRules || []);
             let interactionMissing = false;
+            let stateMissing = false;
             const submitted = rules.some(rule => {
               if (rule.style.length !== 0 || pseudoOf(rule.selectorText) !== expectedPseudo) return false;
-              const submittedHasHover = /:hover\b/.test(rule.selectorText);
-              if (submittedHasHover !== expectedHasHover) return false;
-              const submittedHost = hostOf(rule.selectorText).replace(/:hover\b/g, '');
+              const submittedStates = stateOf(rule.selectorText);
+              if (submittedStates.join('|') !== expectedStates.join('|')) return false;
+              const submittedHost = stripStates(hostOf(rule.selectorText));
               let submittedNodes;
               try { submittedNodes = Array.from(document.querySelectorAll(submittedHost)); }
               catch (error) { return false; }
               if (!sameNodeSet(submittedNodes, expectedNodes)) return false;
-              if (expectedHasHover && (!lastHoveredElement || !lastHoveredElement.matches(expectedBase))) { interactionMissing = true; return false; }
+
+              if (expectedStates.includes(':hover') && (!lastHoveredElement || !lastHoveredElement.matches(expectedBase))) { interactionMissing = true; return false; }
+              if (expectedStates.includes(':focus') && (!lastFocusedElement || !lastFocusedElement.matches(expectedBase))) { interactionMissing = true; return false; }
+              if (expectedStates.includes(':focus-visible') && (!lastFocusVisibleElement || !lastFocusVisibleElement.matches(expectedBase))) { interactionMissing = true; return false; }
+              if (expectedStates.includes(':focus-within') && (!lastFocusedElement || !lastFocusedElement.closest(expectedBase))) { interactionMissing = true; return false; }
+              if (expectedStates.includes(':active') && (!lastActiveElement || !lastActiveElement.matches(expectedBase))) { interactionMissing = true; return false; }
+              if (expectedStates.some(state => [':checked', ':valid', ':invalid'].includes(state))) {
+                let stateMatches = [];
+                try { stateMatches = Array.from(document.querySelectorAll(hostOf(rule.selectorText))); } catch (error) {}
+                if (!stateMatches.length) { stateMissing = true; return false; }
+              }
               if (expectedPseudo.includes('::selection') && !window.getSelection()?.toString()) { interactionMissing = true; return false; }
               const requiredTokens = Array.isArray(data.check.mustContain) ? data.check.mustContain : data.check.mustContain ? [data.check.mustContain] : [];
               if (!requiredTokens.every(token => rule.selectorText.includes(token))) return false;
               return true;
             });
             const found = expectedNodes.length > 0;
-            result = {found, passed: submitted && found, reason: submitted && found ? '' : interactionMissing ? 'interaction' : 'selector'};
+            result = {found, passed: submitted && found, reason: submitted && found ? '' : interactionMissing ? 'interaction' : stateMissing ? 'state' : 'selector'};
           } else {
             const checks = Array.isArray(data.check.checks) ? data.check.checks : [data.check];
             result = checkPropertyRequirements(checks);
