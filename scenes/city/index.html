@@ -150,7 +150,7 @@
               .replace(/::(before|after|first-letter|first-line|selection|placeholder)\\b/g, '')
               .replace(/:(hover|active|focus-visible|focus-within|focus|checked|disabled|enabled|required|optional|valid|invalid)\\b/g, '');
             const found = !!hostSelector && document.querySelectorAll(hostSelector).length > 0;
-            result = {found, passed: submitted && found, reason: submitted ? '' : 'selector'};
+            result = {found, passed: submitted && found, reason: submitted && found ? '' : 'selector'};
           } else {
             const checks = Array.isArray(data.check.checks) ? data.check.checks : [data.check];
             result = checkPropertyRequirements(checks);
