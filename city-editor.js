@@ -449,6 +449,24 @@
       ['Пример','.roof, .building-base, .entrance выбирает три разные группы элементов.']
     ]]
   ]};
+  const relationshipReference={title:'Связи между элементами',items:[
+    ['Потомок — пробел','Пробел выбирает элемент на любом уровне вложенности внутри указанного предка. Между ними могут находиться другие элементы.',[
+      ['Пример','.building .window выбирает окна на любой глубине внутри здания.'],
+      ['Важно','Пробел не означает непосредственное соседство или прямое вложение.']
+    ]],
+    ['Прямой ребёнок — >','Знак > выбирает только непосредственных дочерних элементов указанного родителя.',[
+      ['Пример','.building > .roof выбирает крышу, если она находится прямо внутри здания.'],
+      ['Отличие от пробела','.building .roof также найдёт крышу глубже по дереву, а .building > .roof — только на первом уровне вложенности.']
+    ]],
+    ['Следующий сосед — +','Знак + выбирает элемент, который расположен сразу после указанного элемента и имеет с ним одного родителя.',[
+      ['Пример','.roof + .building-sign выбирает шапку здания, если она стоит непосредственно после крыши.'],
+      ['Важно','Если между элементами находится другой элемент, соседство через + не сработает.']
+    ]],
+    ['Последующие соседи — ~','Знак ~ выбирает все элементы подходящего типа или класса, которые идут после указанного элемента и имеют с ним одного родителя. Между ними могут быть другие элементы.',[
+      ['Пример','.roof ~ .building-base выбирает основание, расположенное после крыши внутри того же здания.'],
+      ['Отличие от +','+ выбирает только ближайшего следующего соседа; ~ — всех подходящих следующих соседей.']
+    ]]
+  };
   const topics={
     frame:{title:'Рамки',tasks:[
       {section:'Основы рамки',title:'Добавь сплошную рамку окнам',prompt:'Добавь окнам центральной башни рамку со всех четырёх сторон: толщиной 2px, сплошную, бирюзового цвета.',hint:'Сокращённая запись border задаёт толщину, стиль и цвет сразу для всех четырёх сторон.',reference:[referenceLibrary.frame],solution:'.building-center .window {\n  border: 2px solid #60a4a1;\n}',checks:['top','right','bottom','left'].flatMap(side=>[{selector:'.building-center .window',property:`border-${side}-width`,expected:'2px'},{selector:'.building-center .window',property:`border-${side}-style`,expected:'solid'},{selector:'.building-center .window',property:`border-${side}-color`,expected:'rgb(96, 164, 161)'}])}
@@ -471,6 +489,10 @@
       {section:'Группировка селекторов',title:'Выбери крыши и основания',prompt:'Выбери все крыши и все основания зданий одним правилом. Это две самостоятельные группы элементов.',hint:'Запятая разделяет независимые селекторы. Укажи .roof, затем .building-base.',reference:[groupingReference],solution:'.roof, .building-base {\n  \n}',check:{mode:'selector',selector:'.roof, .building-base',mustContain:[",",".roof",".building-base"]}},
       {section:'Группировка селекторов',title:'Отличи список от сочетания классов',prompt:'Выбери все здания и отдельно все окна. Не ищи один элемент, у которого одновременно есть классы building и window.',hint:'Здесь нужны две независимые выборки. Раздели .building и .window запятой.',reference:[groupingReference],solution:'.building, .window {\n  \n}',check:{mode:'selector',selector:'.building, .window',mustContain:[",",".building",".window"]}},
       {section:'Группировка селекторов',title:'Собери список из трёх селекторов',prompt:'Одним правилом выбери крыши, основания и входы всех зданий.',hint:'Перечисли три самостоятельных селектора через запятую: .roof, .building-base и .entrance.',reference:[groupingReference],solution:'.roof, .building-base, .entrance {\n  \n}',check:{mode:'selector',selector:'.roof, .building-base, .entrance',mustContain:[",",".roof",".building-base",".entrance"]}},
+      {section:'Связи между элементами',title:'Выбери окна внутри зданий',prompt:'Выбери все окна, находящиеся внутри зданий. Между зданием и окном могут быть этажи и другие вложенные элементы.',hint:'Пробел между .building и .window означает связь «потомок»: вложенность может быть любой глубины.',reference:[relationshipReference],solution:'.building .window {\n  \n}',check:{mode:'selector',selector:'.building .window',mustContain:['.building','.window']}},
+      {section:'Связи между элементами',title:'Выбери крыши — прямых детей зданий',prompt:'Выбери крыши, которые находятся непосредственно внутри зданий. Не выбирай элементы, вложенные в крышу.',hint:'Знак > выбирает только прямых детей. Слева укажи .building, справа — .roof.',reference:[relationshipReference],solution:'.building > .roof {\n  \n}',check:{mode:'selector',selector:'.building > .roof',mustContain:['.building','>','.roof']}},
+      {section:'Связи между элементами',title:'Выбери шапки сразу после крыш',prompt:'Выбери шапки зданий, которые идут непосредственно сразу за крышей на том же уровне.',hint:'Знак + выбирает только следующего соседа. Между .roof и .building-sign не должно быть другого элемента.',reference:[relationshipReference],solution:'.roof + .building-sign {\n  \n}',check:{mode:'selector',selector:'.roof + .building-sign',mustContain:['.roof','+','.building-sign']}},
+      {section:'Связи между элементами',title:'Выбери основания после крыш',prompt:'Выбери основания зданий, расположенные после крыши на том же уровне. Между крышей и основанием могут находиться другие элементы.',hint:'Знак ~ выбирает всех подходящих последующих соседей, а не только ближайший элемент.',reference:[relationshipReference],solution:'.roof ~ .building-base {\n  \n}',check:{mode:'selector',selector:'.roof ~ .building-base',mustContain:['.roof','~','.building-base']}},
       {section:'Сочетания псевдоклассов',title:'Исключи два вида окон',prompt:'Выбери окна, у которых нет ни класса lit, ни класса pink. Оба исключения должны относиться к одному окну.',hint:'Соедини два :not() подряд: сначала исключи .lit, затем .pink.',reference:[pseudoClassReference],solution:'.window:not(.lit):not(.pink) {\n  \n}',check:{mode:'selector',selector:'.window:not(.lit):not(.pink)',mustContain:[":not",".window",".lit",".pink"]}},
       {section:'Сочетания псевдоклассов',title:'Объедини варианты и исключение',prompt:'Выбери розовые (.pink) или бирюзовые (.teal) окна, но исключи из результата все светящиеся окна (.lit).',hint:'Словарь: pink — розовый, teal — бирюзовый, lit — светящийся. Внутри :is() перечисли .pink и .teal, после него добавь :not(.lit).',reference:[pseudoClassReference],solution:'.window:is(.pink, .teal):not(.lit) {\n  \n}',check:{mode:'selector',selector:'.window:is(.pink, .teal):not(.lit)',mustContain:[":is",":not",".pink",".teal",".lit"]}},
       {section:'Сочетания псевдоклассов',title:'Выбери этажи двух зданий по условию',prompt:'Выбери каждый второй этаж левого и правого зданий. Центральное здание не должно попасть в выборку.',hint:'Используй :where() для списка двух зданий и :nth-child(even) для этажей.',reference:[pseudoClassReference],solution:':where(.building-left, .building-right) .floor:nth-child(even) {\n  \n}',check:{mode:'selector',selector:':where(.building-left, .building-right) .floor:nth-child(even)',mustContain:[":where",":nth-child",".floor"]}},
