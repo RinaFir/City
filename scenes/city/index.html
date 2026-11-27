@@ -225,7 +225,7 @@
               if (expectedStates.includes(':focus-visible') && (!lastFocusVisibleElement || !lastFocusVisibleElement.matches(expectedBase))) { interactionMissing = true; return false; }
               if (expectedStates.includes(':focus-within') && (!lastFocusedElement || !lastFocusedElement.closest(expectedBase))) { interactionMissing = true; return false; }
               if (expectedStates.includes(':active') && (!lastActiveElement || !lastActiveElement.matches(expectedBase))) { interactionMissing = true; return false; }
-              if (expectedStates.some(state => [':checked', ':valid', ':invalid'].includes(state))) {
+              if (expectedStates.some(state => [':checked', ':disabled', ':enabled', ':required', ':optional', ':valid', ':invalid'].includes(state))) {
                 let stateMatches = [];
                 try { stateMatches = Array.from(document.querySelectorAll(hostOf(rule.selectorText))); } catch (error) {}
                 if (!stateMatches.length) { stateMissing = true; return false; }
