@@ -32,3 +32,18 @@
 .reference-part[open]>summary:after{content:"−"}
 .reference-part p{font-size:10px;line-height:1.55;color:#aab6cd;margin:6px 0 2px}
 @media(max-width:520px){.reference-property>summary{grid-template-columns:minmax(0,1fr) 14px;gap:3px}.reference-property>summary code{grid-column:1;grid-row:1;font-size:10px}.reference-property>summary span{grid-column:1;grid-row:2}.reference-property>summary:after{grid-column:2;grid-row:1}.reference-parts{margin-left:5px}.reference-part{display:block}}
+
+/* Общая легенда сцены */
+.legend-group{border-top:1px solid #252d43;padding:9px 0}
+.legend-group>summary{display:flex;align-items:center;justify-content:space-between;cursor:pointer;list-style:none;color:#b9c5dc;font-size:11px;font-weight:700}
+.legend-group>summary::-webkit-details-marker{display:none}
+.legend-group>summary:after{content:"+";font:14px var(--mono);color:var(--teal);margin-left:auto;padding-left:10px}
+.legend-group[open]>summary:after{content:"−"}
+.legend-group>summary span{font:10px var(--mono);color:var(--muted);margin-left:8px}
+.legend-group .class-list{padding-top:9px}
+.class-chip{gap:5px}
+.class-chip span{display:flex;flex-direction:column;gap:3px;line-height:1.45}
+.class-chip span strong{font-size:10px;color:#c7d2e8;font-weight:700}
+.class-chip span{font-size:9px}
+.legend-note{font-size:10px;line-height:1.55;color:#7f8da9;margin:12px 0 0}
+@media(max-width:520px){.legend-group .class-list{grid-template-columns:1fr}}
