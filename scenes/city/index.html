@@ -40,7 +40,130 @@
     
   </main>
   <script>
-    (()=>{let playerStyle=document.getElementById('player-css');const previewStyle=document.createElement('style');previewStyle.textContent='[data-nocturne-selected="true"]{outline:2px solid #60a4a1!important;outline-offset:2px!important;box-shadow:0 0 12px #60a4a188!important}';document.head.appendChild(previewStyle);function refreshSelectorPreview(){document.querySelectorAll('[data-nocturne-selected]').forEach(node=>node.removeAttribute('data-nocturne-selected'));try{Array.from(playerStyle?.sheet?.cssRules||[]).forEach(rule=>{if(!rule.selectorText)return;try{const previewSelector=rule.selectorText.replace(/::(before|after|first-letter|first-line|selection|placeholder)\b/g,'').replace(/:(hover|active|focus-visible|focus-within|focus|checked|disabled|enabled|required|optional|valid|invalid)\b/g,'');if(previewSelector)document.querySelectorAll(previewSelector).forEach(node=>node.setAttribute('data-nocturne-selected','true'))}catch(error){}})}catch(error){}}window.addEventListener('message',event=>{if(event.source!==window.parent||!event.data)return;const data=event.data;if(data.type==='NOCTURNE_APPLY_CSS'){if(!playerStyle){playerStyle=document.createElement('style');playerStyle.id='player-css';document.head.appendChild(playerStyle)}playerStyle.textContent=typeof data.css==='string'?data.css:'';refreshSelectorPreview();return}if(data.type==='NOCTURNE_CHECK_TASK'&&data.id&&data.check){let passed=false,found=false;try{if(data.check.mode==='selector'){const expected=data.check.selector.replace(/\s+/g,'');const rules=Array.from(playerStyle?.sheet?.cssRules||[]).filter(rule=>typeof rule.selectorText==='string');const submitted=rules.some(rule=>rule.selectorText.replace(/\s+/g,'')===expected);const hostSelector=data.check.selector.replace(/::(before|after|first-letter|first-line|selection|placeholder)\b/g,'').replace(/:(hover|active|focus-visible|focus-within|focus|checked|disabled|enabled|required|optional|valid|invalid)\b/g,'');found=!!hostSelector&&document.querySelectorAll(hostSelector).length>0;passed=submitted&&found}else{const checks=Array.isArray(data.check.checks)?data.check.checks:[data.check];found=checks.every(item=>document.querySelectorAll(item.selector).length>0);passed=found&&checks.every(item=>Array.from(document.querySelectorAll(item.selector)).every(target=>getComputedStyle(target).getPropertyValue(item.property).trim()===item.expected))}}catch(error){found=false}window.parent.postMessage({type:'NOCTURNE_TASK_RESULT',id:data.id,passed,found},event.origin==='null'?'*':event.origin)}})})();
+    (() => {
+      let playerStyle = document.getElementById('player-css');
+      const previewStyle = document.createElement('style');
+      previewStyle.textContent = '[data-nocturne-selected="true"]{outline:2px solid #60a4a1!important;outline-offset:2px!important;box-shadow:0 0 12px #60a4a188!important}';
+      document.head.appendChild(previewStyle);
+
+      const propertyAliases = {
+        'border-top-width': ['border-top-width', 'border-top', 'border-width', 'border'],
+        'border-top-style': ['border-top-style', 'border-top', 'border-style', 'border'],
+        'border-top-color': ['border-top-color', 'border-top', 'border-color', 'border'],
+        'outline-width': ['outline-width', 'outline'],
+        'outline-style': ['outline-style', 'outline'],
+        'outline-color': ['outline-color', 'outline'],
+        'background-color': ['background-color', 'background'],
+        'row-gap': ['row-gap', 'gap', 'grid-row-gap', 'grid-gap'],
+        'opacity': ['opacity']
+      };
+
+      function refreshSelectorPreview() {
+        document.querySelectorAll('[data-nocturne-selected]').forEach(node => node.removeAttribute('data-nocturne-selected'));
+        try {
+          Array.from(playerStyle?.sheet?.cssRules || []).forEach(rule => {
+            if (!rule.selectorText) return;
+            try {
+              document.querySelectorAll(rule.selectorText).forEach(node => node.setAttribute('data-nocturne-selected', 'true'));
+            } catch (error) {
+              // Не имитируем псевдоклассы и псевдоэлементы удалением их условий.
+            }
+          });
+        } catch (error) {}
+      }
+
+      function collectStyleRules(rules, result = []) {
+        Array.from(rules || []).forEach(rule => {
+          if (typeof rule.selectorText === 'string' && rule.style) result.push(rule);
+          if (rule.cssRules) collectStyleRules(rule.cssRules, result);
+        });
+        return result;
+      }
+
+      function ruleDeclaresProperty(rule, property) {
+        const aliases = propertyAliases[property] || [property];
+        const names = Array.from({length: rule.style.length}, (_, index) => rule.style.item(index));
+        return names.some(name => aliases.includes(name));
+      }
+
+      function getAppliedElements(property) {
+        const applied = new Set();
+        const rules = collectStyleRules(playerStyle?.sheet?.cssRules || []);
+        rules.forEach(rule => {
+          if (!ruleDeclaresProperty(rule, property)) return;
+          try {
+            document.querySelectorAll(rule.selectorText).forEach(node => applied.add(node));
+          } catch (error) {
+            // Селекторы псевдоэлементов не являются DOM-элементами.
+          }
+        });
+        return applied;
+      }
+
+      function sameElements(actual, expected) {
+        if (actual.size !== expected.length) return false;
+        return expected.every(node => actual.has(node));
+      }
+
+      function checkPropertyRequirements(checks) {
+        let found = true;
+        const passed = checks.every(item => {
+          const targets = Array.from(document.querySelectorAll(item.selector));
+          if (!targets.length) {
+            found = false;
+            return false;
+          }
+          const applied = getAppliedElements(item.property);
+          if (!sameElements(applied, targets)) return false;
+          return targets.every(target =>
+            getComputedStyle(target).getPropertyValue(item.property).trim() === item.expected
+          );
+        });
+        return {found, passed: found && passed};
+      }
+
+      window.addEventListener('message', event => {
+        if (event.source !== window.parent || !event.data) return;
+        const data = event.data;
+
+        if (data.type === 'NOCTURNE_APPLY_CSS') {
+          if (!playerStyle) {
+            playerStyle = document.createElement('style');
+            playerStyle.id = 'player-css';
+            document.head.appendChild(playerStyle);
+          }
+          playerStyle.textContent = typeof data.css === 'string' ? data.css : '';
+          refreshSelectorPreview();
+          return;
+        }
+
+        if (data.type !== 'NOCTURNE_CHECK_TASK' || !data.id || !data.check) return;
+
+        let result = {passed: false, found: false};
+        try {
+          if (data.check.mode === 'selector') {
+            const expected = data.check.selector.replace(/\\s+/g, '');
+            const rules = collectStyleRules(playerStyle?.sheet?.cssRules || []);
+            const submitted = rules.some(rule => rule.selectorText.replace(/\\s+/g, '') === expected);
+            const hostSelector = data.check.selector
+              .replace(/::(before|after|first-letter|first-line|selection|placeholder)\\b/g, '')
+              .replace(/:(hover|active|focus-visible|focus-within|focus|checked|disabled|enabled|required|optional|valid|invalid)\\b/g, '');
+            const found = !!hostSelector && document.querySelectorAll(hostSelector).length > 0;
+            result = {found, passed: submitted && found};
+          } else {
+            const checks = Array.isArray(data.check.checks) ? data.check.checks : [data.check];
+            result = checkPropertyRequirements(checks);
+          }
+        } catch (error) {
+          result = {passed: false, found: false};
+        }
+
+        window.parent.postMessage(
+          {type: 'NOCTURNE_TASK_RESULT', id: data.id, passed: result.passed, found: result.found},
+          event.origin === 'null' ? '*' : event.origin
+        );
+      });
+    })();
   </script>
 </body>
 </html>
