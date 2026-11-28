@@ -203,7 +203,7 @@
             const hostOf = selector => selector.replace(pseudoPattern, '').trim();
             const expectedSelector = data.check.selector;
             const expectedPseudo = pseudoOf(expectedSelector);
-            const statePattern = /:(focus-visible|focus-within|focus|active|checked|disabled|enabled|required|optional|valid|invalid|hover)\\b/g;
+            const statePattern = /:(focus-visible|focus-within|focus|active|checked|disabled|enabled|required|optional|valid|invalid|hover)\b/g;
             const stateOf = selector => Array.from(new Set(selector.match(statePattern) || []));
             const expectedStates = stateOf(expectedSelector);
             const stripStates = selector => selector.replace(statePattern, '');
